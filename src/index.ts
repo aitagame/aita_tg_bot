@@ -1,3 +1,4 @@
+import './paths';
 import db from './db'
 import bot from './bot'
 import getInfo from './handlers/getInfo'

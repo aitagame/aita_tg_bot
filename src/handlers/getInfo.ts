@@ -1,8 +1,8 @@
-import { InlineKeyboardButton, KeyboardButton, Message } from "node-telegram-bot-api"
-import { characterInfoTemplate, CharInfoType } from "../templates/characterInfo"
+import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
+import { characterInfoTemplate, CharInfoType } from "@templates/characterInfo"
 import bot from "../bot"
-import { getPhotoByElement } from "../tools/getPhotoByElement"
-import getRandom from '../tools/getRandomInt'
+import { getPhotoByElement } from "@tools/getPhotoByElement"
+import getRandom from '@tools/getRandomInt'
 
 const getInfo = async (msg: Message) => {
     if (!msg.from) {
