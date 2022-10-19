@@ -10,7 +10,7 @@ const getInfo = async (msg: Message) => {
     }
 
     const { id } = msg.chat
-    const randomPhoto: ['fire', 'earth', 'wind'] = ['fire', 'earth', 'wind']
+    const randomPhoto = ['fire', 'earth', 'wind'] as const
 
     const charInfo: CharInfoType = {
         name: msg.from.first_name,
