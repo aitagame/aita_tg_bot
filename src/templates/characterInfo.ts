@@ -26,7 +26,7 @@ function capitalizeFirstLetter(string: string) {
  * @returns {string} Character info template string
  */
 
-function characterInfoTemplate(charInfo: CharInfoType) {
+function characterInfoTemplate(charInfo: CharInfoType, userID: number) {
     const {
         name,
         char_class,
@@ -49,22 +49,21 @@ function characterInfoTemplate(charInfo: CharInfoType) {
 
     // template =>
 
-    const head = `${capitalizeFirstLetter(char_class)} ${name}\n`
-
-    const levelInfo = `🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n`
-
-    const characteristics = `🗡Attack: ${attack}
+    const template = `
+${userID}
+${capitalizeFirstLetter(char_class)} ${name}\n
+🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
+🗡Attack: ${attack}
 🛡 Defence: ${armor}
 ⚡️ Chance of critical: ${crit_chance}
 💥 Critical damage: x${crit_multiplicator}
-🍃 Chance of evade: ${evade_chance}\n`
-    const battles = `🏅 Rating: ${rating}
+🍃 Chance of evade: ${evade_chance}\n
+🏅 Rating: ${rating}
 Wins: ${wins} Loses: ${loses} (${percenteOfWins}%)\n`
 
     // =>
 
-
-    return head + levelInfo + characteristics + battles
+    return template
 }
 
 export { CharInfoType, characterInfoTemplate }
