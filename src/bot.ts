@@ -1,13 +1,12 @@
 import Bot from 'node-telegram-bot-api'
-import dotenv from 'dotenv'
-dotenv.config()
+import config from './config'
 
-const token = process.env.TOKEN
+const token = config
 if (!token) {
     throw new Error('TOKEN IS REQUIRED')
 }
 
-const bot = new Bot(token)
+const bot = new Bot(config.bot.token as string)
 
 bot.startPolling()
 

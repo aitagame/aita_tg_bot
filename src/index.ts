@@ -3,11 +3,18 @@ import bot from './bot'
 import getInfo from './handlers/getInfo'
 import getResources from './handlers/getResources'
 
-// db.connect((err) => {
-//     if (err) throw err
+function startServer() {
+    try {
+        db.connect(() => {
+            console.log('Connected to DB')
+        })
+    }
+    catch (err) {
+        throw err
+    }
+}
 
-//     console.log('Connected to DB')
-// })
+startServer()
 
 bot.onText(/\/info/, getInfo)
 bot.onText(/\/resources/, getResources)
