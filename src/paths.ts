@@ -8,4 +8,5 @@ addAliases({
     '@sql': `${__dirname}/sql`,
     '@bot': `${__dirname}/bot`,
     '@src': `${__dirname}/`,
+    'types': `${__dirname}/types`,
 });

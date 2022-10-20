@@ -38,7 +38,7 @@ const getInfo = async (msg: Message) => {
         [{ text: 'My character', callback_data: 'character' }, { text: 'Resources', callback_data: 'resources' }]
     ]
 
-    const replyText = characterInfoTemplate(charInfo, msg.from.id)
+    const replyText = characterInfoTemplate(charInfo)
 
     getPhotoByElement(charInfo.char_class)
         .then(data => {

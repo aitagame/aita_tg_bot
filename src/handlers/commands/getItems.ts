@@ -1,14 +1,14 @@
 import { Message } from "node-telegram-bot-api"
-import { resourceTemplate, ResourceTemplateType } from "@templates/resources"
+import { resourceTemplate, ResourceTemplateType } from "@templates/items"
 import bot from "@src/bot"
 
-const getResources = async (msg: Message) => {
+const getItems = async (msg: Message) => {
     if (!msg.from) {
         throw new Error('Sender undefined')
     }
     const { id } = msg.chat
 
-    const resources: ResourceTemplateType = [{
+    const items: ResourceTemplateType = [{
         name: 'Stone',
         base_cost: 1,
         description: 'Very hard peace of rock',
@@ -38,7 +38,7 @@ const getResources = async (msg: Message) => {
     }
     ]
 
-    const replyText = resourceTemplate(resources)
+    const replyText = resourceTemplate(items)
 
             bot.sendMessage(id, replyText)
 
@@ -46,4 +46,4 @@ const getResources = async (msg: Message) => {
 
 }
 
-export default getResources
+export default getItems

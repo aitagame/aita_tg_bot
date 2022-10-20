@@ -1,20 +1,18 @@
 import { Message } from "node-telegram-bot-api";
-import getInfo from "./commands/getInfo";
-import getResources from "./commands/getResources";
-import registerUser from "./commands/registerUser";
+import commands from "./commands";
 
 function textController(msg: Message) {
     const { text } = msg
 
     switch (text) {
         case ('/start'): {
-            return registerUser(msg)
+            return commands.registerUser(msg)
         }
         case ('/info'): {
-            return getInfo(msg)
+            return commands.getInfo(msg)
         }
         case ('/resources'): {
-            return getResources(msg)
+            return commands.getResources(msg)
         }
     }
 }

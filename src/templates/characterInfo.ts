@@ -24,7 +24,7 @@ function capitalizeFirstLetter(string: string) {
  * Template string for character info
  */
 
-function characterInfoTemplate(charInfo: CharInfoType, userID: number) {
+function characterInfoTemplate(charInfo: CharInfoType) {
     const {
         name,
         char_class,
@@ -52,7 +52,6 @@ function characterInfoTemplate(charInfo: CharInfoType, userID: number) {
     // template =>
 
     const template = `
-${userID}
 ${capitalizeFirstLetter(char_class)} ${name}\n
 🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
 🗡Attack: ${attack}

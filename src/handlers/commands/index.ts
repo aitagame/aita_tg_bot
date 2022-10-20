@@ -1,5 +1,5 @@
 import getInfo from './getInfo'
-import getResources from './getResources'
+import getResources from './getItems'
 import registerUser from './registerUser'
 
 
