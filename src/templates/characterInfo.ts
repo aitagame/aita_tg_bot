@@ -45,7 +45,11 @@ function characterInfoTemplate(charInfo: CharInfoType, userID: number) {
 
 
     const totalBattles = loses + wins
-    const percenteOfWins = ((wins / totalBattles) * 100).toPrecision(3)
+    let percenteOfWins = ((wins / totalBattles) * 100)
+    
+    if (isNaN(percenteOfWins)) {
+        percenteOfWins = 0
+    }
 
     // template =>
 

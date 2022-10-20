@@ -3,6 +3,7 @@ import { characterInfoTemplate, CharInfoType } from "@templates/characterInfo"
 import bot from "../bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
 import getRandom from '@tools/getRandomInt'
+import Characters from "../sql/character"
 
 const getInfo = async (msg: Message) => {
     if (!msg.from) {
@@ -10,22 +11,31 @@ const getInfo = async (msg: Message) => {
     }
 
     const { id } = msg.chat
-    const randomPhoto = ['fire', 'earth', 'wind'] as const
+
+    const controller = new Characters()
+
+    const userData = await controller.readById(msg.from.id)
+
+    if (!userData) {
+        return bot.sendMessage(msg.chat.id, 'You have not character. Type /start for create one.')
+    }
+
+
 
     const charInfo: CharInfoType = {
-        name: msg.from.first_name,
-        level: getRandom(0, 100),
-        experience: getRandom(1, 1249),
+        name: userData.name,
+        level: userData.level,
+        experience: userData.experience,
         maxLevelExperience: 1250,
-        char_class: randomPhoto[getRandom(0, 2)],
-        armor: getRandom(10, 150),
-        attack: getRandom(10, 150),
-        crit_chance: getRandom(0, 100),
-        crit_multiplicator: getRandom(0.2, 2.5),
-        evade_chance: getRandom(0, 100),
-        loses: getRandom(10, 150),
-        wins: getRandom(10, 150),
-        rating: getRandom(0, 6000)
+        char_class: userData.form,
+        armor: userData.armor,
+        attack: userData.attack,
+        crit_chance: userData.crit_chance,
+        crit_multiplicator: userData.crit_damage,
+        evade_chance: userData.evade_chance,
+        loses: 0,
+        wins: 0,
+        rating: userData.rating
     }
 
     const keyboard: Array<InlineKeyboardButton[]> = [
@@ -35,7 +45,7 @@ const getInfo = async (msg: Message) => {
     const replyText = characterInfoTemplate(charInfo, msg.from.id)
 
 
-    getPhotoByElement(randomPhoto[getRandom(0, 2)])
+    getPhotoByElement(charInfo.char_class)
         .then(data => {
             bot.sendPhoto(id, data, {
                 caption: replyText,

@@ -3,7 +3,7 @@ import db from './db'
 import bot from './bot'
 import getInfo from './handlers/getInfo'
 import getResources from './handlers/getResources'
-import isQueryFromReplyMessage from './tools/IsQueryFromMessage'
+import registerUser from '@handlers/registerUser';
 
 function startServer() {
     try {
@@ -20,6 +20,9 @@ startServer()
 
 bot.onText(/((\/info)|My character)/, getInfo)
 bot.onText(/(\/resources|Resources)/, getResources)
+
+bot.onText(/\/start/, registerUser)
+
 
 // end this feature
 

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-type ElementNameType = 'fire' | 'wind' | 'earth'
+type ElementNameType = string
 
 /**
  * Search and return needed photo in assets/
