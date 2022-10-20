@@ -22,8 +22,6 @@ function capitalizeFirstLetter(string: string) {
 
 /**
  * Template string for character info
- * @param charInfo {CharInfoType} properties of character
- * @returns {string} Character info template string
  */
 
 function characterInfoTemplate(charInfo: CharInfoType, userID: number) {

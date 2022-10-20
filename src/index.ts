@@ -1,9 +1,8 @@
 import './paths';
 import db from './db'
 import bot from './bot'
-import getInfo from './handlers/getInfo'
-import getResources from './handlers/getResources'
-import registerUser from '@handlers/registerUser';
+import textController from '@handlers/textController';
+import callbackQueryController from '@handlers/cbQueryController';
 
 function startServer() {
     try {
@@ -18,23 +17,5 @@ function startServer() {
 
 startServer()
 
-bot.onText(/((\/info)|My character)/, getInfo)
-bot.onText(/(\/resources|Resources)/, getResources)
-
-bot.onText(/\/start/, registerUser)
-
-
-// end this feature
-
-// bot.on('callback_query', (query) => {
-
-//     if ('undefined' === typeof query.message?.reply_to_message?.from) throw new Error('Only messages available to handle')
-
-    
-
-//     if (query.message?.reply_to_message?.from?.id === query.from.id) {
-//         bot.sendMessage(query.message.reply_to_message.chat.id, 'Да, кнопку нажал '.concat(query.from.first_name))
-//     } else {
-//         bot.sendMessage(query.message.reply_to_message.chat.id, 'А ты педик, '.concat(query.from.first_name))
-//     }
-// })
+bot.on('text', textController)
+bot.on('callback_query', callbackQueryController)

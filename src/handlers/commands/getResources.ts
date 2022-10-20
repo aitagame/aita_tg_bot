@@ -1,6 +1,6 @@
 import { Message } from "node-telegram-bot-api"
-import { resourceTemplate, ResourceTemplateType } from "../templates/resources"
-import bot from "../bot"
+import { resourceTemplate, ResourceTemplateType } from "@templates/resources"
+import bot from "@src/bot"
 
 const getResources = async (msg: Message) => {
     if (!msg.from) {

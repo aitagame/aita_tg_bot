@@ -4,6 +4,7 @@ CREATE TABLE characters (
     name VARCHAR(64) NOT NULL,
     form VARCHAR(64) NOT NULL,
     level INTEGER NOT NULL DEFAULT 0,
+    next_level_experience INTEGER NOT NULL DEFAULT 100,
     rating INTEGER NOT NULL DEFAULT 0,
     skill_points INTEGER NOT NULL DEFAULT 0,
     experience INTEGER NOT NULL DEFAULT 0,

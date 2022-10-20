@@ -1,5 +1,5 @@
 import sql from 'mysql2'
-import config from './config'
+import config from '@src/config'
 
 const {
     database,

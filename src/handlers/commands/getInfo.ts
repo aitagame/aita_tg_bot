@@ -1,26 +1,22 @@
 import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
 import { characterInfoTemplate, CharInfoType } from "@templates/characterInfo"
-import bot from "../bot"
+import bot from "@src/bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
-import getRandom from '@tools/getRandomInt'
-import Characters from "../sql/character"
+
+import Characters from "@sql/character"
 
 const getInfo = async (msg: Message) => {
+    const controller = new Characters()
+    const { id } = msg.chat
+    
     if (!msg.from) {
         throw new Error('Sender undefined')
     }
-
-    const { id } = msg.chat
-
-    const controller = new Characters()
-
     const userData = await controller.readById(msg.from.id)
 
     if (!userData) {
         return bot.sendMessage(msg.chat.id, 'You have not character. Type /start for create one.')
     }
-
-
 
     const charInfo: CharInfoType = {
         name: userData.name,
@@ -44,7 +40,6 @@ const getInfo = async (msg: Message) => {
 
     const replyText = characterInfoTemplate(charInfo, msg.from.id)
 
-
     getPhotoByElement(charInfo.char_class)
         .then(data => {
             bot.sendPhoto(id, data, {
@@ -56,8 +51,6 @@ const getInfo = async (msg: Message) => {
                 }
             })
         })
-
-
 
 }
 

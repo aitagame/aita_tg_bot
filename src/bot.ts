@@ -1,5 +1,5 @@
 import Bot from 'node-telegram-bot-api'
-import config from './config'
+import config from '@src/config'
 
 const token = config
 if (!token) {

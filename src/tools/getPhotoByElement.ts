@@ -4,13 +4,11 @@ import path from 'path'
 type ElementNameType = string
 
 /**
- * Search and return needed photo in assets/
- * @param elementName {string} Name of element class (ex. 'fire')
- * @returns {Buffer} Image in Buffer type 
+ * Search and return needed photo in assets
  */
 
 async function getPhotoByElement(elementName: ElementNameType) {
-    const imgPath = path.join('src/assets', `${elementName}.png`)
+    const imgPath = path.join('src/assets','profilePhotos', `${elementName}.png`)
 
     const data = await fs.promises.readFile(imgPath)
 
