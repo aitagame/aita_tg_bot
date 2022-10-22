@@ -1,9 +1,8 @@
-import db from "../db";
+import db from "@config/db";
 import { CharacterType } from "types/character";
 import { OkPacket } from "mysql2";
 
 export default class Characters {
-
 
     readAll(): Promise<Array<CharacterType>> {
         return new Promise((resolve, reject) => {
@@ -23,14 +22,14 @@ export default class Characters {
         })
     }
 
-    create(character: Pick<CharacterType, 'user_id' | 'name' | 'form'>): Promise<CharacterType> {
+    create(character: Pick<CharacterType, 'user_id' | 'name' | 'element'>): Promise<CharacterType> {
         return new Promise((resolve, reject) => {
             db.query<OkPacket>(
-                'INSERT INTO characters (user_id, name, form) VALUES (?, ?, ?)',
+                'INSERT INTO characters (user_id, name, element) VALUES (?, ?, ?)',
                 [
                     character.user_id,
                     character.name,
-                    character.form
+                    character.element
                 ],
                 (err, res) => {
                     if (err) reject(err)
@@ -41,7 +40,5 @@ export default class Characters {
             )
         })
     }
-
-
 
 }

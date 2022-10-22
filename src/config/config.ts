@@ -15,6 +15,11 @@ const config = {
     },
     bot: {
         token: process.env.BOT_TOKEN
+    },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+        password: process.env.REDIS_PASSWORD
     }
 }
 

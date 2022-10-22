@@ -1,12 +1,14 @@
-import getInfo from './getInfo'
-import getResources from './getItems'
-import registerUser from './registerUser'
+import getInfo from './characterInfo/getInfo'
+import getResources from './items/getItems'
+import registerUser from './register/registerUser'
+import actions from './actions/listActions'
 
 
 const commands = {
     getInfo,
     getResources,
-    registerUser
+    registerUser,
+    actions
 }
 
 export default commands

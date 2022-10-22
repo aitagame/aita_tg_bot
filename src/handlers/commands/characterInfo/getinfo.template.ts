@@ -1,8 +1,8 @@
-import { ElementNameType } from "tools/getPhotoByElement"
+import elements from "@src/data/elements";
 
 type CharInfoType = {
     name: string,
-    char_class: ElementNameType,
+    element_id: number,
     level: number,
     experience: number,
     maxLevelExperience: number,
@@ -27,7 +27,7 @@ function capitalizeFirstLetter(string: string) {
 function characterInfoTemplate(charInfo: CharInfoType) {
     const {
         name,
-        char_class,
+        element_id,
         armor,
         attack,
         crit_chance,
@@ -41,10 +41,11 @@ function characterInfoTemplate(charInfo: CharInfoType) {
         maxLevelExperience
     } = charInfo
 
+    const elementName = elements.find(item => item.id === element_id)?.element as string
 
     const totalBattles = loses + wins
     let percenteOfWins = ((wins / totalBattles) * 100)
-    
+
     if (isNaN(percenteOfWins)) {
         percenteOfWins = 0
     }
@@ -52,7 +53,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     // template =>
 
     const template = `
-${capitalizeFirstLetter(char_class)} ${name}\n
+${capitalizeFirstLetter(elementName)} ${name}\n
 🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
 🗡Attack: ${attack}
 🛡 Defence: ${armor}

@@ -1,8 +1,8 @@
 import getRandomInt from "@tools/getRandomInt"
-import bot from "@src/bot"
+import bot from "@src/config/bot"
 import { Message, User } from "node-telegram-bot-api"
 import Characters from "@sql/character"
-import getInfo from "./getInfo"
+import getInfo from "../characterInfo/getInfo"
 
 async function registerUser(msg: Message) {
     const dbCharacters = new Characters()
@@ -14,7 +14,7 @@ async function registerUser(msg: Message) {
     if (!charatcter) {
         await dbCharacters.create({
             user_id: user_id,
-            form: ['fire', 'earth', 'wind'][getRandomInt(0, 2)],
+            element: getRandomInt(0, 2),
             name: first_name
         })
         return bot.sendMessage(chat_id, 'User created')

@@ -9,4 +9,6 @@ addAliases({
     '@bot': `${__dirname}/bot`,
     '@src': `${__dirname}/`,
     'types': `${__dirname}/types`,
+    '@data': `${__dirname}/data`,
+    '@config': `${__dirname}/config`,
 });

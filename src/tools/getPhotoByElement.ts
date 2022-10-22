@@ -1,18 +1,21 @@
 import fs from 'fs'
 import path from 'path'
-
-type ElementNameType = string
+import elements from '@data/elements'
 
 /**
  * Search and return needed photo in assets
  */
 
-async function getPhotoByElement(elementName: ElementNameType) {
-    const imgPath = path.join('src/assets','profilePhotos', `${elementName}.png`)
+async function getPhotoByElement(element_id: number) {
+    const elementName = elements.find(item => {
+        return item.id === element_id
+    })?.element as string
+
+    const imgPath = path.join('src/assets', 'profilePhotos', `${elementName}.png`)
 
     const data = await fs.promises.readFile(imgPath)
 
     return data
 }
 
-export { ElementNameType, getPhotoByElement }
+export { getPhotoByElement }

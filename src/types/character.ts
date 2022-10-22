@@ -10,17 +10,16 @@ export interface Balance {
     wind_crystals: number
 }
 
-export interface Resource {
-    name: string
-    amount: number
-    base_cost: number
+export interface Items {
+    item_id: number
+    quantity: number
 }
 
 export interface CharacterType extends RowDataPacket {
     user_id: number
     registered: string
     name: string
-    form: string
+    element: number
     level: number
     rating: number
     skill_points: number
@@ -32,5 +31,5 @@ export interface CharacterType extends RowDataPacket {
     evade_chance: number
     clan: number | null
     balance: Balance,
-    resources: Array<Resource>
+    resources: Array<Items>
 }

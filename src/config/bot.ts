@@ -1,5 +1,5 @@
 import Bot from 'node-telegram-bot-api'
-import config from '@src/config'
+import config from './config'
 
 const token = config
 if (!token) {
@@ -7,8 +7,5 @@ if (!token) {
 }
 
 const bot = new Bot(config.bot.token as string)
-
-bot.startPolling()
-
 
 export default bot
