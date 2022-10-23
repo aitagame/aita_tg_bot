@@ -1,4 +1,4 @@
-import elements from "@src/data/elements";
+import elements from "@data/elements.json";
 
 type CharInfoType = {
     name: string,

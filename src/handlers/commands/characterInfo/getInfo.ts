@@ -1,4 +1,4 @@
-import { InlineKeyboardButton, Message, MenuButton } from "node-telegram-bot-api"
+import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
 import { characterInfoTemplate, CharInfoType } from "@handlers/commands/characterInfo/getinfo.template"
 import bot from "@src/config/bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
@@ -36,7 +36,7 @@ const getInfo = async (msg: Message) => {
 
 
     const keyboard: Array<InlineKeyboardButton[]> = [
-        [{ text: 'My character', callback_data: 'character' }, { text: 'Resources', callback_data: 'resources' }, { text: 'actions', callback_data: 'actions' }]
+        [{ text: 'My character', callback_data: 'character' }, { text: 'Resources', callback_data: 'resources' }, { text: 'Actions', callback_data: 'actions' }]
     ]
 
     const replyText = characterInfoTemplate(charInfo)

@@ -1,4 +1,4 @@
-import GameItems from '@data/items'
+import GameItems from '@data/items.json'
 import { Items } from "@src/types/character"
 
 type ResourceTemplateType = Array<Items>

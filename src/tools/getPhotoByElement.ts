@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import elements from '@data/elements'
+import { ElementType } from 'types/dataElement'
+import elements from '@data/elements.json'
 
 /**
  * Search and return needed photo in assets
