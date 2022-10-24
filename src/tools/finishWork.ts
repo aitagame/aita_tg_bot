@@ -1,6 +1,6 @@
 import redis from '@config/redis'
 import bot from '@src/config/bot'
-import { actionStatus } from '@src/types/redisActionStatus'
+import { userData } from '@src/types/redisUserData'
 
 async function finishWork(user_id: number, chat_id: number, message: string) {
     const redisData = await redis.get(user_id.toString())
@@ -9,13 +9,18 @@ async function finishWork(user_id: number, chat_id: number, message: string) {
         return
     }
 
-    const workStatus = JSON.parse(redisData) as actionStatus
+    const workStatus = JSON.parse(redisData) as userData
 
-    if (workStatus.end > Date.now()) {
-        return 
+    if (workStatus.state.action !== 'idle') {
+        return
     }
 
-    redis.del(user_id.toString())
+    const updateStatus = { ...workStatus }
+    updateStatus.state.action = 'idle'
+    updateStatus.state.start = null
+    updateStatus.state.end = null
+
+    redis.set(user_id.toString(), JSON.stringify(updateStatus))
     bot.sendMessage(chat_id, message)
 }
 

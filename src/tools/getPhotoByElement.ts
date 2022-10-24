@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { ElementType } from 'types/dataElement'
 import elements from '@data/elements.json'
 
 /**
