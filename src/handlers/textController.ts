@@ -10,16 +10,16 @@ async function textController(msg: Message) {
     const user = await charController.readById(msg.from?.id as number)
 
     if (!user) {
-        return commands.registerUser(msg)
+        return commands.commands.registerUser(msg)
     }
 
     switch (text) {
         case '/start':
         case '/info': {
-            return commands.getInfo(msg)
+            return commands.commands.getInfo(msg)
         }
         case ('/resources'): {
-            return commands.getResources(msg)
+            return commands.commands.getResources(msg)
         }
     }
 }

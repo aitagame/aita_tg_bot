@@ -14,8 +14,8 @@ async function getPhotoByElement(element_id: number) {
 
     const imgPath = path.join('src/assets', 'profilePhotos', `${elementName}.png`)
 
-    const data = await fs.promises.readFile(imgPath)
-
+    const data = fs.createReadStream(imgPath)
+    
     return data
 }
 

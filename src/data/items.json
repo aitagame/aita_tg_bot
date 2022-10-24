@@ -4,6 +4,13 @@
         "description": "Once it was part of a large tree.",
         "item_id": 1,
         "marker": "🌳",
-        "can_use": true
+        "can_use": false
+    },
+    {
+        "name": "Stone",
+        "description": "Just a rock.",
+        "item_id": 2,
+        "marker": "🪨",
+        "can_use": false
     }
 ]

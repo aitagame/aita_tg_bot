@@ -3,7 +3,7 @@ import redis from "@config/redis"
 import bot from "@src/config/bot";
 import finishWork from "@tools/finishWork";
 
-async function goToForest(query: CallbackQuery) {
+async function goToCaves(query: CallbackQuery) {
     const user_id = query.from.id as number
     const chat_id = query.message?.chat.id as number
     const message_id = query.message?.message_id as number
@@ -21,7 +21,7 @@ async function goToForest(query: CallbackQuery) {
     const end = start + (1000 * 60)
 
     const data = JSON.stringify({
-        action: 'forest',
+        action: 'caves',
         start: start,
         end: end
     })
@@ -30,18 +30,18 @@ async function goToForest(query: CallbackQuery) {
     redis.expire(user_id.toString(), 60 * 5)    // After 5 minutes data will be ereased
 
     setTimeout(() => {
-        finishWork(user_id, chat_id, 'You returned from the forest.')
+        finishWork(user_id, chat_id, 'You returned from the caves.')
     }, 1000 * 60);
 
     bot.answerCallbackQuery(query.id, {
-        text: 'Successfull! You\'re going to forest'
+        text: 'Successfull! You\'re going to caves'
     })
 
-    bot.editMessageText('Your character is going to the forest. Good luck!', {
+    bot.editMessageText('Your character is going to the caves. Good luck!', {
         chat_id: chat_id,
         message_id: message_id
     })
 
 }
 
-export default goToForest
+export default goToCaves

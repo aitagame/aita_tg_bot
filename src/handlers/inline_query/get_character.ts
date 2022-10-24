@@ -1,4 +1,4 @@
-import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
+import { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api"
 import { characterInfoTemplate, CharInfoType } from "@handlers/commands/characterInfo/getinfo.template"
 import bot from "@src/config/bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
@@ -6,17 +6,17 @@ import elements from '@data/elements.json'
 
 import Characters from "@sql/character"
 
-const getInfo = async (msg: Message) => {
+const getCharacter = async (query: CallbackQuery) => {
     const controller = new Characters()
-    const { id } = msg.chat
+    const chat_id = query.message?.chat.id as number
+    const user_id = query.from.id as number
 
-    if (!msg.from) {
-        throw new Error('Sender undefined')
-    }
-    const userData = await controller.readById(msg.from.id)
+    const userData = await controller.readById(user_id)
 
     if (!userData) {
-        return bot.sendMessage(msg.chat.id, 'You have not character. Type /start for create one.')
+        return bot.answerCallbackQuery(query.id, {
+            text: 'You have not character. Type /start for create one.'
+        })
     }
 
     const charInfo: CharInfoType = {
@@ -35,30 +35,35 @@ const getInfo = async (msg: Message) => {
         rating: userData.rating
     }
 
+    const filename = elements.find(item => item.id === charInfo.element_id)?.element as string
 
     const keyboard: Array<InlineKeyboardButton[]> = [
         [{ text: 'My character', callback_data: 'get_character' }, { text: 'Items', callback_data: 'get_items' }, { text: 'Actions', callback_data: 'get_actions' }]
     ]
 
-    const filename = elements.find(item => item.id === charInfo.element_id)?.element as string
-
     const replyText = characterInfoTemplate(charInfo)
+
+    bot.answerCallbackQuery(query.id, {
+        text: ':)'
+    })
+
 
     const photo = await getPhotoByElement(charInfo.element_id)
 
-    bot.sendPhoto(id, photo, {
+    bot.sendPhoto(chat_id, photo, {
         caption: replyText,
-        reply_to_message_id: msg.message_id,
+        reply_to_message_id: query.message?.message_id,
         reply_markup: {
             inline_keyboard: keyboard,
             resize_keyboard: true
-        },
-
-    }, {
+        }
+    },
+    {
         filename: filename,
-        contentType: 'image/x-png',
+        contentType: 'image/x-png'
     })
+
 
 }
 
-export default getInfo
+export default getCharacter
