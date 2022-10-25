@@ -10,13 +10,22 @@ async function goToForest(query: CallbackQuery) {
     const chat_id = query.message?.chat.id as number
     const message_id = query.message?.message_id as number
 
+    const answer = "You returned from the forest."
+
     const response = await redis.get(user_id.toString())
 
-    if (!response) {
-        return createTaskForest(query, user_id, chat_id, message_id)
+    if (!response) {        // If no data about user state
+        createTask({
+            chat_id: chat_id,
+            text: answer,
+            time: 1000 * 60 * 5,
+            user_id: user_id,
+            action: 'forest'
+        })
+        return sendAnswer({ chat_id, message_id, query })
     }
 
-    const redisData = JSON.parse(response) as userData
+    const redisData = JSON.parse(response) as userData  // Parse JSON from Redis
 
     if (redisData.state.action !== 'idle') {        // If already in action
         bot.answerCallbackQuery(query.id, {
@@ -25,28 +34,61 @@ async function goToForest(query: CallbackQuery) {
         return bot.sendMessage(chat_id, 'You already in adventure')
     }
 
-    createTaskForest(query, user_id, chat_id, message_id)
+    createTask({        // Create task
+        chat_id: chat_id,
+        text: answer,
+        time: 1000 * 60 * 5,
+        user_id: user_id,
+        action: 'forest'
+    })
+
+    sendAnswer({ chat_id, message_id, query })
 }
 
-function createTaskForest(query: CallbackQuery, user_id: number, chat_id: number, message_id: number) {
+
+// ========>
+
+
+type TaskOptions = {
+    time: number
+    user_id: number,
+    chat_id: number,
+    text: string,
+    action: userData['state']['action']
+}
+
+function createTask(options: TaskOptions) {
+    const { action, chat_id, text, time, user_id } = options
     const start = Date.now()
-    const end = start + (1000 * 60)
+    const end = start + time
 
     const data: userData = {
         user_id: user_id,
         chat_id: chat_id,
         state: {
-            action: 'forest',
+            action: action,
             start: start,
             end: end,
         }
     }
+
     redis.set(user_id.toString(), JSON.stringify(data))
 
     setTimeout(() => {
-        finishWork(user_id, 'You returned from the forest.')
-    }, 1000 * 60);
+        finishWork(user_id, text)
+    }, time);
+}
 
+// ========>
+
+type AnswerOptions = {
+    query: CallbackQuery,
+    chat_id: number,
+    message_id: number
+}
+
+function sendAnswer(options: AnswerOptions) {
+    const { chat_id, message_id, query } = options
     bot.answerCallbackQuery(query.id, {
         text: 'Successfull! You\'re going to forest'
     })
@@ -55,7 +97,6 @@ function createTaskForest(query: CallbackQuery, user_id: number, chat_id: number
         chat_id: chat_id,
         message_id: message_id
     })
-
 }
 
 export default goToForest
