@@ -39,8 +39,9 @@ async function startServer() {
     }
 }
 
-startServer()
-restoreTasks()
+startServer().then(() => {
+    restoreTasks()
+})
 
 bot.on('text', textController)
 bot.on('callback_query', callbackQueryController)
