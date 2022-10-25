@@ -4,6 +4,7 @@ import bot from "@src/config/bot";
 import finishWork from "@tools/finishWork";
 import { userData } from "@src/types/redisUserData";
 
+
 async function goToForest(query: CallbackQuery) {
     const user_id = query.from.id as number
     const chat_id = query.message?.chat.id as number
@@ -12,35 +13,7 @@ async function goToForest(query: CallbackQuery) {
     const response = await redis.get(user_id.toString())
 
     if (!response) {
-        const start = Date.now()
-        const end = start + (1000 * 60)
-
-        const data: userData = {
-            user_id: user_id,
-            chat_id: chat_id,
-            state: {
-                action: 'forest',
-                start: start,
-                end: end,
-            }
-        }
-        redis.set(user_id.toString(), JSON.stringify(data))
-
-        setTimeout(() => {
-            finishWork(user_id, 'You returned from the forest.')
-        }, 1000 * 60);
-
-        bot.answerCallbackQuery(query.id, {
-            text: 'Successfull! You\'re going to forest'
-        })
-
-        bot.editMessageText('Your character is going to the forest. Good luck!', {
-            chat_id: chat_id,
-            message_id: message_id
-        })
-
-        return
-
+        return createTaskForest(query, user_id, chat_id, message_id)
     }
 
     const redisData = JSON.parse(response) as userData
@@ -52,6 +25,10 @@ async function goToForest(query: CallbackQuery) {
         return bot.sendMessage(chat_id, 'You already in adventure')
     }
 
+    createTaskForest(query, user_id, chat_id, message_id)
+}
+
+function createTaskForest(query: CallbackQuery, user_id: number, chat_id: number, message_id: number) {
     const start = Date.now()
     const end = start + (1000 * 60)
 
@@ -64,7 +41,6 @@ async function goToForest(query: CallbackQuery) {
             end: end,
         }
     }
-
     redis.set(user_id.toString(), JSON.stringify(data))
 
     setTimeout(() => {

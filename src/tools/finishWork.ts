@@ -11,10 +11,6 @@ async function finishWork(user_id: number, message: string) {
 
     const workStatus = JSON.parse(redisData) as userData
 
-    if (workStatus.state.action !== 'idle') {
-        return
-    }
-
     const modifiedStatus: userData = {
         chat_id: workStatus.chat_id,
         user_id: workStatus.user_id,
