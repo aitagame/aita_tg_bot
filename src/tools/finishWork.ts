@@ -2,7 +2,7 @@ import redis from '@config/redis'
 import bot from '@src/config/bot'
 import { userData } from '@src/types/redisUserData'
 import actionData from '@data/actions.json'
-import { randomInt } from 'crypto'
+import getRandomInt from '@tools/getRandomInt'
 
 async function finishWork(user_id: number) {
     const redisData = await redis.get(user_id.toString())
@@ -28,7 +28,8 @@ async function finishWork(user_id: number) {
     }
 
     const results = actionData[workStatus.state.action].result
-    const message = results[randomInt(0, results.length - 1)].message
+
+    const message = results[getRandomInt(0, results.length - 1)].message
 
     redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
     bot.sendMessage(workStatus.chat_id, message)
