@@ -9,7 +9,6 @@ import finishWork from '@tools/finishWork';
 
 async function restoreTasks() {
     const keysList = await redis.keys('*')
-    console.log(keysList)
     if (!keysList) {
         return console.log('Empty set.')
     }
@@ -18,14 +17,11 @@ async function restoreTasks() {
         const userData = JSON.parse(response) as userData
 
         if (userData.state.action === 'idle' || userData.state.start === null || userData.state.end === null) {
-            return console.log(userData.state.action)
+            return
         }
-        
-        console.log('i do!')
 
         const elapsedTime = userData.state.end - Date.now()
-        console.log(elapsedTime)
-        console.log(userData)
+
         setTimeout(() => {
             finishWork(userData.user_id, userData.state.action)
         }, elapsedTime)
