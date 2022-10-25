@@ -15,12 +15,17 @@ async function finishWork(user_id: number, message: string) {
         return
     }
 
-    const updateStatus = { ...workStatus }
-    updateStatus.state.action = 'idle'
-    updateStatus.state.start = null
-    updateStatus.state.end = null
+    const modifiedStatus: userData = {
+        chat_id: workStatus.chat_id,
+        user_id: workStatus.user_id,
+        state: {
+            action: 'idle',
+            start: null,
+            end: null
+        }
+    }
 
-    redis.set(user_id.toString(), JSON.stringify(updateStatus))
+    redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
     bot.sendMessage(workStatus.chat_id, message)
 }
 
