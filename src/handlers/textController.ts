@@ -18,7 +18,7 @@ async function textController(msg: Message) {
         case '/info': {
             return commands.commands.getInfo(msg)
         }
-        case ('/resources'): {
+        case ('/items'): {
             return commands.commands.getResources(msg)
         }
     }

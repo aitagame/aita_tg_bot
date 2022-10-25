@@ -10,14 +10,12 @@ async function goToCaves(query: CallbackQuery) {
     const chat_id = query.message?.chat.id as number
     const message_id = query.message?.message_id as number
 
-    const answer = "You returned from the caves."
 
     const response = await redis.get(user_id.toString())
 
     if (!response) {        // If no data about user state
         createTask({
             chat_id: chat_id,
-            text: answer,
             time: 1000 * 60 * 5,
             user_id: user_id,
             action: 'caves'
@@ -36,7 +34,6 @@ async function goToCaves(query: CallbackQuery) {
 
     createTask({        // Create task
         chat_id: chat_id,
-        text: answer,
         time: 1000 * 60 * 5,
         user_id: user_id,
         action: 'caves'
@@ -53,12 +50,11 @@ type TaskOptions = {
     time: number
     user_id: number,
     chat_id: number,
-    text: string,
     action: userData['state']['action']
 }
 
 function createTask(options: TaskOptions) {
-    const { action, chat_id, text, time, user_id } = options
+    const { action, chat_id, time, user_id } = options
     const start = Date.now()
     const end = start + time
 
