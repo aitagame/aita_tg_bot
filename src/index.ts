@@ -19,6 +19,7 @@ async function restoreTasks() {
         if (userData.state.action === 'idle' || userData.state.start === null || userData.state.end === null) {
             return
         }
+        
         console.log('i do!')
         const elapsedTime = userData.state.end - Date.now()
         setTimeout(() => {

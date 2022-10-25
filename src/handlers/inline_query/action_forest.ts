@@ -12,9 +12,35 @@ async function goToForest(query: CallbackQuery) {
     const response = await redis.get(user_id.toString())
 
     if (!response) {
-        return bot.answerCallbackQuery(query.id, {
-            text: 'Server error.'
+        const start = Date.now()
+        const end = start + (1000 * 60)
+
+        const data: userData = {
+            user_id: user_id,
+            chat_id: chat_id,
+            state: {
+                action: 'forest',
+                start: start,
+                end: end,
+            }
+        }
+        redis.set(user_id.toString(), JSON.stringify(data))
+
+        setTimeout(() => {
+            finishWork(user_id, 'You returned from the forest.')
+        }, 1000 * 60);
+
+        bot.answerCallbackQuery(query.id, {
+            text: 'Successfull! You\'re going to forest'
         })
+
+        bot.editMessageText('Your character is going to the forest. Good luck!', {
+            chat_id: chat_id,
+            message_id: message_id
+        })
+
+        return
+
     }
 
     const redisData = JSON.parse(response) as userData
