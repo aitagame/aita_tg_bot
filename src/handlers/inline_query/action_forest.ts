@@ -32,7 +32,6 @@ async function goToForest(query: CallbackQuery) {
     }
 
     redis.set(user_id.toString(), JSON.stringify(data))
-    redis.expire(user_id.toString(), 60 * 5)    // After 5 minutes data will be ereased
 
     setTimeout(() => {
         finishWork(user_id, 'You returned from the forest.')
