@@ -2,6 +2,7 @@ import { CallbackQuery } from "node-telegram-bot-api";
 import redis from "@config/redis"
 import bot from "@src/config/bot";
 import finishWork from "@tools/finishWork";
+import { userData } from "@src/types/redisUserData";
 
 async function goToForest(query: CallbackQuery) {
     const user_id = query.from.id as number
@@ -20,13 +21,17 @@ async function goToForest(query: CallbackQuery) {
     const start = Date.now()
     const end = start + (1000 * 60)
 
-    const data = JSON.stringify({
-        action: 'forest',
-        start: start,
-        end: end
-    })
+    const data: userData = {
+        user_id: user_id,
+        state: {
+            action: 'forest',
+            start: start,
+            end: end,
+            chat_id: chat_id
+        }
+    }
 
-    redis.set(user_id.toString(), data)
+    redis.set(user_id.toString(), JSON.stringify(data))
     redis.expire(user_id.toString(), 60 * 5)    // After 5 minutes data will be ereased
 
     setTimeout(() => {
