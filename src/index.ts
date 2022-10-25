@@ -23,7 +23,7 @@ async function restoreTasks() {
         const elapsedTime = userData.state.end - Date.now()
 
         setTimeout(() => {
-            finishWork(userData.user_id, userData.state.action)
+            finishWork(userData.user_id)
         }, elapsedTime)
     })
 }

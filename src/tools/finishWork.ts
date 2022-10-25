@@ -1,8 +1,10 @@
 import redis from '@config/redis'
 import bot from '@src/config/bot'
 import { userData } from '@src/types/redisUserData'
+import actionData from '@data/actions.json'
+import { randomInt } from 'crypto'
 
-async function finishWork(user_id: number, message: string) {
+async function finishWork(user_id: number) {
     const redisData = await redis.get(user_id.toString())
 
     if (!redisData) {
@@ -10,6 +12,10 @@ async function finishWork(user_id: number, message: string) {
     }
 
     const workStatus = JSON.parse(redisData) as userData
+
+    if (workStatus.state.action === 'idle') {
+        return
+    }
 
     const modifiedStatus: userData = {
         chat_id: workStatus.chat_id,
@@ -20,6 +26,9 @@ async function finishWork(user_id: number, message: string) {
             end: null
         }
     }
+
+    const results = actionData[workStatus.state.action].result
+    const message = results[randomInt(0, results.length - 1)].message
 
     redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
     bot.sendMessage(workStatus.chat_id, message)

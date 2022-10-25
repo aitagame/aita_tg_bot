@@ -75,7 +75,7 @@ function createTask(options: TaskOptions) {
     redis.set(user_id.toString(), JSON.stringify(data))
 
     setTimeout(() => {
-        finishWork(user_id, text)
+        finishWork(user_id)
     }, time);
 }
 
