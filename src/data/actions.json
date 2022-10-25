@@ -1,0 +1,68 @@
+{
+    "forest": {
+        "time": 30000,
+        "go_message": "You have gone on a journey into the forest. Good luck!",
+        "result": [
+            {
+                "message": "You returned from a trip, admired the beautiful view on the way home and had a good rest.",
+                "loot": [],
+                "experience": {
+                    "min": 2,
+                    "max": 6
+                }
+            },
+            {
+                "message": "You met a terrible scarecrow. But it turned out to be too weak. You took his branches.",
+                "loot": [
+                    {
+                        "item_id": 1,
+                        "chance": 100,
+                        "quantity": {
+                            "min": 1,
+                            "max": 3
+                        }
+                    },
+                    {
+                        "item_id": 2,
+                        "chance": 30,
+                        "quantity": {
+                            "min": 1,
+                            "max": 2
+                        }
+                    }
+                ],
+                "experience": {
+                    "min": 10,
+                    "max": 25
+                }
+            }
+        ]
+    },
+    "caves": {
+        "time": 42000,
+        "go_message": "You have gone to the mountains. No one knows what dangers await you there. Good luck!",
+        "result": [
+            {
+                "message": "The view from the mountains was simply breathtaking. You were so fascinated by it that you forgot why you came here.\nYou didn't find anything.",
+                "loot": [],
+                "experience": {
+                    "min": 2,
+                    "max": 8
+                }
+            },
+            {
+                "message": "While traveling, you wandered into a forgotten mine. In the minecart, you found a few things.",
+                "loot": [
+                    {
+                        "item_id": 2,
+                        "chance": 100,
+                        "quantity": {
+                            "min": 1,
+                            "max": 4
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
