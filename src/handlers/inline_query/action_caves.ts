@@ -2,6 +2,9 @@ import { CallbackQuery } from "node-telegram-bot-api";
 import redis from "@config/redis"
 import bot from "@src/config/bot";
 import finishWork from "@tools/finishWork";
+import { userData } from "@src/types/redisUserData";
+import { access } from "fs";
+import actions from "@handlers/commands/actions/listActions";
 
 async function goToCaves(query: CallbackQuery) {
     const user_id = query.from.id as number
@@ -19,18 +22,21 @@ async function goToCaves(query: CallbackQuery) {
 
     const start = Date.now()
     const end = start + (1000 * 60)
+    const data: userData = {
+        user_id: user_id,
+        chat_id: chat_id,
+        state: {
+            action: 'caves',
+            start: start,
+            end: end
+        }
+    }
 
-    const data = JSON.stringify({
-        action: 'caves',
-        start: start,
-        end: end
-    })
-
-    redis.set(user_id.toString(), data)
+    redis.set(user_id.toString(), JSON.stringify(data))
     redis.expire(user_id.toString(), 60 * 5)    // After 5 minutes data will be ereased
 
     setTimeout(() => {
-        finishWork(user_id, chat_id, 'You returned from the caves.')
+        finishWork(user_id, 'You returned from the caves.')
     }, 1000 * 60);
 
     bot.answerCallbackQuery(query.id, {
