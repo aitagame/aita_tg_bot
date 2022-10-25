@@ -9,9 +9,17 @@ async function goToForest(query: CallbackQuery) {
     const chat_id = query.message?.chat.id as number
     const message_id = query.message?.message_id as number
 
-    const redisData = await redis.get(user_id.toString())
+    const response = await redis.get(user_id.toString())
 
-    if (redisData) {        // If already in action
+    if (!response) {
+        return bot.answerCallbackQuery(query.id, {
+            text: 'Server error.'
+        })
+    }
+
+    const redisData = JSON.parse(response) as userData
+
+    if (redisData.state.action !== 'idle') {        // If already in action
         bot.answerCallbackQuery(query.id, {
             text: 'Can\'t go to adventure now!'
         })
