@@ -19,7 +19,7 @@ async function restoreTasks() {
 
         const elapsedTime = userData.state.end - Date.now()
         setTimeout(() => {
-            finishWork(userData.user_id, userData.state.chat_id, 'Restored')
+            finishWork(userData.user_id, userData.state.action)
         }, elapsedTime)
     })
 }
@@ -40,6 +40,7 @@ async function startServer() {
 }
 
 startServer()
+restoreTasks()
 
 bot.on('text', textController)
 bot.on('callback_query', callbackQueryController)

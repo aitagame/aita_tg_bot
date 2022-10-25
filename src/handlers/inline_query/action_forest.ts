@@ -23,11 +23,11 @@ async function goToForest(query: CallbackQuery) {
 
     const data: userData = {
         user_id: user_id,
+        chat_id: chat_id,
         state: {
             action: 'forest',
             start: start,
             end: end,
-            chat_id: chat_id
         }
     }
 
@@ -35,7 +35,7 @@ async function goToForest(query: CallbackQuery) {
     redis.expire(user_id.toString(), 60 * 5)    // After 5 minutes data will be ereased
 
     setTimeout(() => {
-        finishWork(user_id, chat_id, 'You returned from the forest.')
+        finishWork(user_id, 'You returned from the forest.')
     }, 1000 * 60);
 
     bot.answerCallbackQuery(query.id, {
