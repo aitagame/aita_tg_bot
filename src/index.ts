@@ -24,13 +24,13 @@ async function restoreTasks() {
     })
 }
 
-function startServer() {
+async function startServer() {
     try {
         db.connect(() => {
             console.log('Connected to DB')
         })
-        bot.startPolling().then(_ => console.log('Bot started polling successfully'))
-        redis.connect().then(() => {
+        await bot.startPolling().then(_ => console.log('Bot started polling successfully'))
+        await redis.connect().then(() => {
             console.log('Redis connected')
         })
     }
@@ -40,7 +40,6 @@ function startServer() {
 }
 
 startServer()
-restoreTasks()
 
 bot.on('text', textController)
 bot.on('callback_query', callbackQueryController)
