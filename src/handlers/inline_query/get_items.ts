@@ -14,9 +14,7 @@ const getItems = async (query: CallbackQuery) => {
     if (!char) return bot.sendMessage(chat_id, 'You have no character. Type /start to get one.')
 
     const replyText = resourceTemplate(char.resources)
-    bot.answerCallbackQuery(query.id, {
-        text: ':)'
-    })
+    bot.answerCallbackQuery(query.id)
     bot.sendMessage(chat_id, replyText)
 }
 

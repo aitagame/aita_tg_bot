@@ -14,8 +14,10 @@ const getActions = async (query: CallbackQuery) => {
     }
 
     const keyboard: Array<InlineKeyboardButton[]> = [
-        [{ text: 'forest', callback_data: 'action_forest' }, { text: "Caves", callback_data: 'action_caves' }]
+        [{ text: 'Forest', callback_data: 'action_forest' }, { text: "Caves", callback_data: 'action_caves' }]
     ]
+
+    bot.answerCallbackQuery(query.id)
 
     bot.sendMessage(chat_id, 'Available actions:', {
         reply_to_message_id: query.message?.message_id,

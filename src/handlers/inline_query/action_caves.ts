@@ -26,9 +26,7 @@ async function goToCaves(query: CallbackQuery) {
     const redisData = JSON.parse(response) as userData  // Parse JSON from Redis
 
     if (redisData.state.action !== 'idle') {        // If already in action
-        bot.answerCallbackQuery(query.id, {
-            text: 'Can\'t go to adventure now!'
-        })
+        bot.answerCallbackQuery(query.id)
         return bot.sendMessage(chat_id, 'You already in adventure')
     }
 
@@ -86,9 +84,7 @@ type AnswerOptions = {
 
 function sendAnswer(options: AnswerOptions) {
     const { chat_id, message_id, query, action } = options
-    bot.answerCallbackQuery(query.id, {
-        text: `Successfull! You\'re going to ${action}`
-    })
+    bot.answerCallbackQuery(query.id)
 
     bot.editMessageText(`Your character is going to the ${action}. Good luck!`, {
         chat_id: chat_id,

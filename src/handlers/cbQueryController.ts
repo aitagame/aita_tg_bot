@@ -1,5 +1,5 @@
 import { CallbackQuery, Message } from "node-telegram-bot-api";
-import handlers from "./commands";
+import handlers from ".";
 
 function callbackQueryController(query: CallbackQuery) {
 

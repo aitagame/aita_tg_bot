@@ -14,9 +14,7 @@ const getCharacter = async (query: CallbackQuery) => {
     const userData = await controller.readById(user_id)
 
     if (!userData) {
-        return bot.answerCallbackQuery(query.id, {
-            text: 'You have not character. Type /start for create one.'
-        })
+        return bot.answerCallbackQuery(query.id)
     }
 
     const charInfo: CharInfoType = {
@@ -43,9 +41,7 @@ const getCharacter = async (query: CallbackQuery) => {
 
     const replyText = characterInfoTemplate(charInfo)
 
-    bot.answerCallbackQuery(query.id, {
-        text: ':)'
-    })
+    bot.answerCallbackQuery(query.id)
 
 
     const photo = await getPhotoByElement(charInfo.element_id)
