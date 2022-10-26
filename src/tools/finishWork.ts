@@ -6,6 +6,7 @@ import getRandomInt from '@tools/getRandomInt'
 import items from '@data/items.json'
 import { ItemDB } from '@src/types/items'
 import ItemsDBController from '@sql/itemsDB'
+import Characters from '@sql/charactersDB'
 
 async function finishWork(user_id: number) {
     const redisData = await redis.get(user_id.toString())
@@ -68,7 +69,10 @@ async function finishWork(user_id: number) {
 
     const finalMessage = result.message.concat('\n', experienceMessage, rewardsMessage)
     // ===> END OF TEXT WORKING
-    
+
+    const CharacterController = new Characters()
+    CharacterController.updateExperience(user_id, recievedExperience)
+
 
     redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
     bot.sendMessage(workStatus.chat_id, finalMessage)

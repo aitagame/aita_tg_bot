@@ -41,4 +41,20 @@ export default class Characters {
         })
     }
 
+    updateExperience(user_id: number, experience: number): Promise<CharacterType> {
+        return new Promise((resolve, reject) => {
+            db.query<OkPacket>(
+                `UPDATE characters SET experience=experience + ? WHERE user_id=?;`,
+                [experience, user_id],
+                (err, res) => {
+                    if (err) reject(err)
+                    else this.readById(res.insertId)
+                        .then(user => resolve(user!))
+                        .catch(reject)
+                }
+            )
+            
+        })
+    }
+
 }
