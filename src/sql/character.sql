@@ -1,5 +1,6 @@
 CREATE TABLE characters (
-    user_id BIGINT UNIQUE PRIMARY KEY,
+    user_id BIGINT UNIQUE,
+    PRIMARY KEY (user_id),
     registered DATETIME DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(64) NOT NULL,
     element INTEGER,

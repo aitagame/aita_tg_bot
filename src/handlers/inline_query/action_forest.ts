@@ -3,6 +3,7 @@ import redis from "@config/redis"
 import bot from "@src/config/bot";
 import finishWork from "@tools/finishWork";
 import { userData } from "@src/types/redisUserData";
+import actionsData from '@data/actions.json'
 
 
 async function goToForest(query: CallbackQuery) {
@@ -15,7 +16,7 @@ async function goToForest(query: CallbackQuery) {
     if (!response) {        // If no data about user state
         createTask({
             chat_id: chat_id,
-            time: 2000,
+            time: actionsData.forest.time,
             user_id: user_id,
             action: 'forest'
         })
@@ -31,7 +32,7 @@ async function goToForest(query: CallbackQuery) {
 
     createTask({        // Create task
         chat_id: chat_id,
-        time: 2000,
+        time: actionsData.forest.time,
         user_id: user_id,
         action: 'forest'
     })
@@ -84,7 +85,7 @@ function sendAnswer(options: AnswerOptions) {
     const { chat_id, message_id, query } = options
     bot.answerCallbackQuery(query.id)
 
-    bot.editMessageText('Your character is going to the forest. Good luck!', {
+    bot.editMessageText(actionsData.forest.go_message, {
         chat_id: chat_id,
         message_id: message_id
     })
