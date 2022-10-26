@@ -1,19 +1,19 @@
-import { CallbackQuery, Message } from "node-telegram-bot-api"
+import { CallbackQuery } from "node-telegram-bot-api"
 import { resourceTemplate } from "@handlers/commands/items/items.template"
 import bot from "@src/config/bot"
-import Characters from "@sql/character"
+import ItemsDBController from "@sql/itemsDB"
 
 const getItems = async (query: CallbackQuery) => {
     const user_id = query.from.id as number
     const chat_id = query.message?.chat.id as number
 
-    const charController = new Characters()
+    const itemsController = new ItemsDBController()
+    const UserInventory = await itemsController.readById(user_id)
+    console.log(UserInventory)
 
-    const char = await charController.readById(user_id)
+    if (!UserInventory) return bot.sendMessage(chat_id, 'You have no character. Type /start to get one.')
 
-    if (!char) return bot.sendMessage(chat_id, 'You have no character. Type /start to get one.')
-
-    const replyText = resourceTemplate(char.resources)
+    const replyText = resourceTemplate(UserInventory)
     bot.answerCallbackQuery(query.id)
     bot.sendMessage(chat_id, replyText)
 }

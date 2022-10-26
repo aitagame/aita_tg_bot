@@ -1,7 +1,7 @@
 import { Message } from "node-telegram-bot-api"
 import { resourceTemplate } from "@handlers/commands/items/items.template"
 import bot from "@src/config/bot"
-import Characters from "@sql/character"
+import Characters from "@sql/charactersDB"
 
 const getItems = async (msg: Message) => {
     if (!msg.from) {

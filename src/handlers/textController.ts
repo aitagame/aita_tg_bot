@@ -1,4 +1,4 @@
-import Characters from "@sql/character";
+import Characters from "@sql/charactersDB";
 import { Message } from "node-telegram-bot-api";
 import commands from ".";
 

@@ -1,7 +1,7 @@
 import { CallbackQuery, InlineKeyboardButton, Message } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
 
-import Characters from "@sql/character"
+import Characters from "@sql/charactersDB"
 
 const actionList = async (query: CallbackQuery) => {
     const controller = new Characters()

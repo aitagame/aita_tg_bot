@@ -4,7 +4,7 @@ import bot from "@src/config/bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
 import elements from '@data/elements.json'
 
-import Characters from "@sql/character"
+import Characters from "@sql/charactersDB"
 
 const getCharacter = async (query: CallbackQuery) => {
     const controller = new Characters()

@@ -1,7 +1,7 @@
 import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
 
-import Characters from "@sql/character"
+import Characters from "@sql/charactersDB"
 
 const actions = async (msg: Message) => {
     const controller = new Characters()

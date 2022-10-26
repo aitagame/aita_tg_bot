@@ -15,7 +15,7 @@ async function goToForest(query: CallbackQuery) {
     if (!response) {        // If no data about user state
         createTask({
             chat_id: chat_id,
-            time: 1000 * 60 * 5,
+            time: 2000,
             user_id: user_id,
             action: 'forest'
         })
@@ -31,7 +31,7 @@ async function goToForest(query: CallbackQuery) {
 
     createTask({        // Create task
         chat_id: chat_id,
-        time: 1000 * 60 * 5,
+        time: 2000,
         user_id: user_id,
         action: 'forest'
     })
