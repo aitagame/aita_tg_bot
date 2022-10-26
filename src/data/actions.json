@@ -1,6 +1,6 @@
 {
     "forest": {
-        "time": 30000,
+        "time": 2000,
         "go_message": "You have gone on a journey into the forest. Good luck!",
         "result": [
             {

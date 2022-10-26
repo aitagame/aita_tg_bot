@@ -41,13 +41,11 @@ export default class Characters {
         })
     }
 
-    updateCharacterParams(user_id: number, options: {
-        [key: keyof CharacterType]: string | number
-    }): Promise<CharacterType> {
+    updateExperience(user_id: number, experience: number): Promise<CharacterType> {
         return new Promise((resolve, reject) => {
             db.query<OkPacket>(
-                `UPDATE characters SET ${Object.keys(options).map(value => `${value} = ?`).join(',')} WHERE user_id=?;`,
-                { ...Object.values(options), user_id: user_id },
+                `UPDATE characters SET experience=experience + ? WHERE user_id=?;`,
+                [experience, user_id],
                 (err, res) => {
                     if (err) reject(err)
                     else this.readById(res.insertId)
@@ -55,6 +53,7 @@ export default class Characters {
                         .catch(reject)
                 }
             )
+            
         })
     }
 

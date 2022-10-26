@@ -71,10 +71,7 @@ async function finishWork(user_id: number) {
     // ===> END OF TEXT WORKING
 
     const CharacterController = new Characters()
-    CharacterController.updateCharacterParams(user_id, {
-        experience: 15,
-        level: 2
-    })
+    CharacterController.updateExperience(user_id, recievedExperience)
 
 
     redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
