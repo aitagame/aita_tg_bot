@@ -1,6 +1,6 @@
 import db from "@src/config/db"
 import { ItemDB } from "@src/types/items"
-import { RowDataPacket } from "mysql2"
+import { OkPacket, RowDataPacket } from "mysql2"
 
 
 
@@ -11,6 +11,22 @@ class ItemsDBController {
             const SQL = 'SELECT UserInventory.item_id, UserInventory.quantity FROM characters INNER JOIN UserInventory ON characters.user_id = ?;'
             db.query<Array<ItemDB & RowDataPacket>>(SQL, [user_id], (err, res) => {
                 if (err) reject(err)
+                else resolve(res)
+            })
+        })
+    }
+
+    addItem(user_id: number, item: ItemDB): Promise<OkPacket> {
+        return new Promise((resolve, reject) => {
+            const SQL = `INSERT INTO
+            UserInventory (user_id, item_id, quantity)
+        VALUES
+            (?, ?, ?) ON DUPLICATE KEY
+        UPDATE
+            quantity = quantity + ?;`
+            const values = [user_id, item.item_id, item.quantity, item.quantity]
+            db.query<OkPacket>(SQL, values, (err, res) => {
+                if(err) reject(err)
                 else resolve(res)
             })
         })

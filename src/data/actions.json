@@ -1,6 +1,6 @@
 {
     "forest": {
-        "time": 300000,
+        "time": 2000,
         "go_message": "You have gone on a journey into the forest. Good luck!",
         "result": [
             {
@@ -39,7 +39,7 @@
         ]
     },
     "caves": {
-        "time": 480000,
+        "time": 3000,
         "go_message": "You have gone to the mountains. No one knows what dangers await you there. Good luck!",
         "result": [
             {

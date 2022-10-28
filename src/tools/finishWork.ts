@@ -71,7 +71,12 @@ async function finishWork(user_id: number) {
     // ===> END OF TEXT WORKING
 
     const CharacterController = new Characters()
+    const ItemController = new ItemsDBController
     CharacterController.updateExperience(user_id, recievedExperience)
+    
+    rewards.forEach(item => {
+        ItemController.addItem(user_id, item)
+    })
 
 
     redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
