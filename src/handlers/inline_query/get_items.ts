@@ -9,7 +9,6 @@ const getItems = async (query: CallbackQuery) => {
 
     const itemsController = new ItemsDBController()
     const UserInventory = await itemsController.readById(user_id)
-    console.log(UserInventory)
 
     if (!UserInventory) return bot.sendMessage(chat_id, 'You have no character. Type /start to get one.')
 
