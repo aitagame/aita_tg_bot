@@ -6,9 +6,6 @@ import textController from '@handlers/textController';
 import callbackQueryController from '@handlers/cbQueryController';
 import { userData } from 'types/redisUserData'
 import finishWork from '@tools/finishWork';
-import { InlineQueryResult } from 'node-telegram-bot-api';
-import Characters from '@sql/charactersDB';
-import { characterInfoTemplate, CharInfoType } from '@handlers/commands/characterInfo/getinfo.template';
 
 async function restoreTasks() {
     const keysList = await redis.keys('*')

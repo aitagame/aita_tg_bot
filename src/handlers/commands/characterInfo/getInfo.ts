@@ -1,5 +1,5 @@
 import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
-import { characterInfoTemplate, CharInfoType } from "@handlers/commands/characterInfo/getinfo.template"
+import { characterInfoTemplate, CharInfoType } from "@handlers/templates/characterInfo"
 import bot from "@src/config/bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
 import elements from '@data/elements.json'

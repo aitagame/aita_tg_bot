@@ -6,7 +6,7 @@ export default class Characters {
 
     readAll(): Promise<Array<CharacterType>> {
         return new Promise((resolve, reject) => {
-            db.query<Array<CharacterType>>("SELECT * FROM characters", (err, res) => {
+            db.query<Array<CharacterType>>("SELECT * FROM Users", (err, res) => {
                 if (err) reject(err)
                 else resolve(res)
             })
@@ -15,7 +15,7 @@ export default class Characters {
 
     readById(user_id: number): Promise<CharacterType | undefined> {
         return new Promise((resolve, reject) => {
-            db.query<Array<CharacterType>>('SELECT * FROM characters WHERE user_id = ?', [user_id], (err, res) => {
+            db.query<Array<CharacterType>>('SELECT * FROM Users WHERE user_id = ?', [user_id], (err, res) => {
                 if (err) reject(err)
                 else resolve(res?.[0])
             })
@@ -25,7 +25,7 @@ export default class Characters {
     create(character: Pick<CharacterType, 'user_id' | 'name' | 'element'>): Promise<CharacterType> {
         return new Promise((resolve, reject) => {
             db.query<OkPacket>(
-                'INSERT INTO characters (user_id, name, element) VALUES (?, ?, ?)',
+                'INSERT INTO Users (user_id, name, element) VALUES (?, ?, ?)',
                 [
                     character.user_id,
                     character.name,
@@ -44,7 +44,7 @@ export default class Characters {
     updateExperience(user_id: number, experience: number): Promise<CharacterType> {
         return new Promise((resolve, reject) => {
             db.query<OkPacket>(
-                `UPDATE characters SET experience=experience + ? WHERE user_id=?;`,
+                `UPDATE Users SET experience=experience + ? WHERE user_id=?;`,
                 [experience, user_id],
                 (err, res) => {
                     if (err) reject(err)

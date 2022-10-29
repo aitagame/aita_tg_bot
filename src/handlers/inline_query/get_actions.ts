@@ -16,7 +16,6 @@ const getActions = async (query: CallbackQuery) => {
         return bot.sendMessage(chat_id, 'You have not character. Type /start for create one.')
     }
 
-
     bot.answerCallbackQuery(query.id)
 
     bot.sendMessage(chat_id, 'Available actions:', {
@@ -25,6 +24,11 @@ const getActions = async (query: CallbackQuery) => {
             inline_keyboard: keyboard,
             resize_keyboard: true
         }
+    })
+
+    bot.editMessageCaption('Available actions', {
+        message_id: query.message?.message_id,
+        chat_id: query.message?.chat.id
     })
 
 }

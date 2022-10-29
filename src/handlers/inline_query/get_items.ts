@@ -1,5 +1,5 @@
 import { CallbackQuery } from "node-telegram-bot-api"
-import { resourceTemplate } from "@handlers/commands/items/items.template"
+import { resourceTemplate } from "@handlers/templates/items"
 import bot from "@src/config/bot"
 import ItemsDBController from "@sql/itemsDB"
 
