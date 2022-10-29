@@ -7,7 +7,7 @@ import { createTask, TaskOptions } from "@tools/createActionTask";
 import actionData from '@data/actions.json'
 
 async function goToCaves(query: CallbackQuery) {
-    const user_id = query.from.id as number
+    const user_id = query.from.id
     const chat_id = query.message?.chat.id as number
     const message_id = query.message?.message_id as number
     const taskOptions: TaskOptions = {
