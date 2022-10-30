@@ -1,0 +1,92 @@
+version: 2.1
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:16.10.0
+      
+jobs:
+  test:
+    executor: node-executor
+    steps:
+      - checkout
+      - run: 
+          name: "Install dependencies"
+          command: |
+            npm i;
+      - save_cache:
+          key: node_modules-{{ .Branch }}-{{ .BuildNum }}
+          paths: 
+            - node_modules
+      - run: 
+          name: "Build app"
+          command: |
+            env > .env;
+            npm run build;
+            env > dist/.env;
+      - save_cache:
+          key: dist-{{ .Branch }}-{{ .BuildNum }}
+          paths: 
+            - dist   
+
+  deploy:
+    executor: node-executor
+    parameters:
+      target_host:
+        type: string
+      branch:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: "Test target availability"
+          command: |
+            ssh -o StrictHostKeyChecking=no << parameters.target_host >> 'echo test';
+      - restore_cache:
+          keys:
+            - node_modules-{{ .Branch }}-{{ .BuildNum }}
+            - node_modules-
+      - restore_cache:
+          keys:
+            - dist-{{ .Branch }}-{{ .BuildNum }}
+            - dist-
+      - run: 
+          name: "Deploy"
+          command: |
+            env > .env;
+            zip build_aita_tg_bot.zip -r .;
+            chmod +x ./install.sh;
+            scp -o StrictHostKeyChecking=no build_aita_tg_bot.zip << parameters.target_host >>:build_aita_tg_bot.zip;
+            scp -o StrictHostKeyChecking=no install.sh << parameters.target_host >>:install_aita_tg_bot.sh;
+            ssh -o StrictHostKeyChecking=no << parameters.target_host >> 'BRANCH=<< parameters.branch >> ./install_aita_tg_bot.sh';
+
+
+workflows:
+  aita-tg-bot-deploy-dev:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: develop
+      - deploy:
+          target_host: $DEV_SSH_HOST
+          branch: develop
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+
+  aita-tg-bot-deploy-prod:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
+      - deploy:
+          target_host: $PROD_SSH_HOST
+          branch: master
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
