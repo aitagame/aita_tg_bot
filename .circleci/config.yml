@@ -22,7 +22,7 @@ jobs:
           command: |
             env > .env;
             npm run build;
-            env > dist/.env;
+            env > build/.env;
       - save_cache:
           key: dist-{{ .Branch }}-{{ .BuildNum }}
           paths: 
