@@ -81,12 +81,12 @@ workflows:
       - test:
           filters:
             branches:
-              only: master
+              only: main
       - deploy:
           target_host: $PROD_SSH_HOST
-          branch: master
+          branch: main
           requires:
             - test
           filters:
             branches:
-              only: master
+              only: main
