@@ -1,20 +1,23 @@
-CREATE TABLE characters (
+CREATE TABLE Users (
     user_id BIGINT UNIQUE,
     PRIMARY KEY (user_id),
     registered DATETIME DEFAULT CURRENT_TIMESTAMP,
+    experience INTEGER NOT NULL DEFAULT 0,
     name VARCHAR(64) NOT NULL,
     element INTEGER,
-    level INTEGER NOT NULL DEFAULT 0,
-    next_level_experience INTEGER NOT NULL DEFAULT 100,
     rating INTEGER NOT NULL DEFAULT 0,
     skill_points INTEGER NOT NULL DEFAULT 0,
-    experience INTEGER NOT NULL DEFAULT 0,
+    clan INTEGER DEFAULT NULL,
+);
+
+CREATE TABLE UserStats (
+    ID INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
+    user_id BIGINT UNIQUE,
     attack INTEGER NOT NULL DEFAULT 5,
     armor INTEGER NOT NULL DEFAULT 5,
     crit_chance INTEGER NOT NULL DEFAULT 0,
     crit_damage INTEGER NOT NULL DEFAULT 1.5,
     evade_chance INTEGER NOT NULL DEFAULT 5,
-    clan INTEGER DEFAULT NULL,
-    balance JSON,
-    resources JSON
-);
+    PRIMARY KEY (ID),
+    FOREIGN KEY (user_id) REFERENCES characters (user_id),
+)
