@@ -17,20 +17,32 @@ const getCharacter = async (query: CallbackQuery) => {
         return bot.answerCallbackQuery(query.id)
     }
 
+    const {
+        armor,
+        attack,
+        crit_chance,
+        crit_damage,
+        element,
+        evade_chance,
+        experience,
+        name,
+        rating,
+    } = userData
+
     const charInfo: CharInfoType = {
-        name: userData.name,
-        level: userData.level,
-        experience: userData.experience,
-        maxLevelExperience: 1250,
-        element_id: userData.element,
-        armor: userData.armor,
-        attack: userData.attack,
-        crit_chance: userData.crit_chance,
-        crit_multiplicator: userData.crit_damage,
-        evade_chance: userData.evade_chance,
+        armor,
+        attack,
+        crit_chance,
+        crit_damage,
+        element_id: element,
+        evade_chance,
+        experience,
+        level: 1,
         loses: 0,
         wins: 0,
-        rating: userData.rating
+        maxLevelExperience: 150,
+        name,
+        rating
     }
 
     const filename = elements.find(item => item.id === charInfo.element_id)?.element as string
@@ -54,10 +66,10 @@ const getCharacter = async (query: CallbackQuery) => {
             resize_keyboard: true
         }
     },
-    {
-        filename: filename,
-        contentType: 'image/x-png'
-    })
+        {
+            filename: filename,
+            contentType: 'image/x-png'
+        })
 
 
 }

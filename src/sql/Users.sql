@@ -8,16 +8,9 @@ CREATE TABLE Users (
     rating INTEGER NOT NULL DEFAULT 0,
     skill_points INTEGER NOT NULL DEFAULT 0,
     clan INTEGER DEFAULT NULL,
-);
-
-CREATE TABLE UserStats (
-    ID INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
-    user_id BIGINT UNIQUE,
     attack INTEGER NOT NULL DEFAULT 5,
     armor INTEGER NOT NULL DEFAULT 5,
     crit_chance INTEGER NOT NULL DEFAULT 0,
     crit_damage INTEGER NOT NULL DEFAULT 1.5,
-    evade_chance INTEGER NOT NULL DEFAULT 5,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (user_id) REFERENCES characters (user_id),
-)
+    evade_chance INTEGER NOT NULL DEFAULT 5
+);

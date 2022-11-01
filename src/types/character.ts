@@ -15,7 +15,7 @@ export interface Items {
     quantity: number
 }
 
-export interface CharacterType extends RowDataPacket {
+export interface CharacterType {
     user_id: number
     registered: string
     name: string
@@ -33,3 +33,4 @@ export interface CharacterType extends RowDataPacket {
     balance: Balance,
     resources: Array<Items>
 }
+

@@ -28,7 +28,7 @@ const getInfo = async (msg: Message) => {
         armor: userData.armor,
         attack: userData.attack,
         crit_chance: userData.crit_chance,
-        crit_multiplicator: userData.crit_damage,
+        crit_damage: userData.crit_damage,
         evade_chance: userData.evade_chance,
         loses: 0,
         wins: 0,

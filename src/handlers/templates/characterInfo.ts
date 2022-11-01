@@ -12,7 +12,7 @@ type CharInfoType = {
     attack: number,
     armor: number,
     crit_chance: number
-    crit_multiplicator: number,
+    crit_damage: number,
     evade_chance: number,
 }
 
@@ -31,7 +31,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
         armor,
         attack,
         crit_chance,
-        crit_multiplicator,
+        crit_damage,
         evade_chance,
         experience,
         level,
@@ -58,7 +58,7 @@ ${capitalizeFirstLetter(elementName)} ${name}\n
 🗡Attack: ${attack}
 🛡 Defence: ${armor}
 ⚡️ Chance of critical: ${crit_chance}
-💥 Critical damage: x${crit_multiplicator}
+💥 Critical damage: x${crit_damage}
 🍃 Chance of evade: ${evade_chance}\n
 🏅 Rating: ${rating}
 Wins: ${wins} Loses: ${loses} (${percenteOfWins}%)\n`
