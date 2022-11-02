@@ -1,8 +1,8 @@
 {
     "forest": {
-        "name": "Caves",
+        "name": "🌲 Forest",
         "time": 300000,
-        "description": "🌲 Forest. Here you can find many simple items.",
+        "description": "Forest. Here you can find many simple items.",
         "go_message": "You have gone on a journey into the forest. Good luck!",
         "result": [
             {
@@ -41,9 +41,9 @@
         ]
     },
     "caves": {
-        "name": "Caves",
+        "name": "⛰ Caves",
         "time": 480000,
-        "description": "⛰ Caves. Here you can get more experince and some rare items. But the chance of failure is higher.",
+        "description": "Caves. Here you can get more experince and some rare items. But the chance of failure is higher.",
         "go_message": "You have gone to the mountains. No one knows what dangers await you there. Good luck!",
         "result": [
             {
