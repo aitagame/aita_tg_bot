@@ -1,12 +1,15 @@
-import getInfo from './commands/characterInfo/getInfo'
-import getResources from './commands/items/getItems'
-import registerUser from './commands/register/registerUser'
-import actions from './commands/actions/listActions'
-import goToCaves from '@handlers/inline_query/action_caves'
-import goToForest from '@handlers/inline_query/action_forest'
-import getActions from '@handlers/inline_query/get_actions'
-import getCharacter from '@handlers/inline_query/get_character'
-import getItems from '@handlers/inline_query/get_items'
+import getInfo from './commands/getInfo'
+import getResources from './commands/getItems'
+import registerUser from './commands/registerUser'
+import actions from './commands/listActions'
+import goToCaves from '@handlers/callbackQuery/action_caves'
+import goToForest from '@handlers/callbackQuery/action_forest'
+import getActions from '@handlers/callbackQuery/get_actions'
+import getCharacter from '@handlers/callbackQuery/get_character'
+import getItems from '@handlers/callbackQuery/get_items'
+import makeDuel from './callbackQuery/duel_accept'
+import { makeDuel as inlineDuel } from './inlineQuery/make_duel'
+import acceptDuel from './callbackQuery/duel_accept'
 
 
 const commands = {
@@ -16,17 +19,24 @@ const commands = {
     actions
 }
 
-const querys = {
+const callbackQuerys = {
     goToCaves,
     goToForest,
     getActions,
     getCharacter,
     getItems,
+    makeDuel,
+    acceptDuel
+}
+
+const inlineQuerys = {
+    inlineDuel
 }
 
 const handlers = {
     commands,
-    querys
+    callbackQuerys,
+    inlineQuerys
 }
 
 export default handlers

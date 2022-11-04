@@ -3,7 +3,7 @@ import handlers from "./handlers";
 
 function callbackQueryController(query: CallbackQuery) {
 
-    const { getActions, getCharacter, getItems, goToCaves, goToForest } = handlers.querys
+    const { getActions, getCharacter, getItems, goToCaves, goToForest, makeDuel, acceptDuel } = handlers.callbackQuerys
 
 
     switch (query.data) {
@@ -22,6 +22,13 @@ function callbackQueryController(query: CallbackQuery) {
         case ('action_caves'): {
             return goToCaves(query)
         }
+        case('make_duel'): {
+            return makeDuel(query)
+        }
+        case('duel_accept'): {
+            return acceptDuel(query)
+        }
+
     }
 }
 

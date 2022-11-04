@@ -2,7 +2,7 @@ import { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
 
 import Characters from "@sql/charactersDB"
-import { actionsTemplate } from "@handlers/templates/actions"
+import { actionsListTemplate } from "@handlers/templates/actionsList"
 
 const getActions = async (query: CallbackQuery) => {
     const controller = new Characters()
@@ -20,7 +20,7 @@ const getActions = async (query: CallbackQuery) => {
 
     bot.answerCallbackQuery(query.id)
 
-    bot.sendMessage(chat_id, actionsTemplate(), {
+    bot.sendMessage(chat_id, actionsListTemplate(), {
         reply_to_message_id: query.message?.message_id,
         reply_markup: {
             inline_keyboard: keyboard,

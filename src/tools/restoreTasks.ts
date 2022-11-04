@@ -5,7 +5,7 @@ import { userData } from 'types/redisUserData'
 async function restoreTasks() {
     const keysList = await redis.keys('*')
     if (!keysList) {
-        return console.log('Empty set.')
+        return
     }
     keysList.forEach(async (item) => {
         const response = await redis.get(item) as string

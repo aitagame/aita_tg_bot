@@ -1,8 +1,8 @@
 import Characters from "@sql/charactersDB";
-import { Message } from "node-telegram-bot-api";
+import { Message, Metadata } from "node-telegram-bot-api";
 import commands from "./handlers";
 
-async function textController(msg: Message) {
+async function textController(msg: Message, meta: Metadata) {
     const { text } = msg
 
     const charController = new Characters()
