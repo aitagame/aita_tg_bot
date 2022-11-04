@@ -3,7 +3,7 @@ import { Message, Metadata } from "node-telegram-bot-api";
 import commands from "./handlers";
 
 async function textController(msg: Message, meta: Metadata) {
-    const { text } = msg
+    const text = msg.text?.toString().toLowerCase()
 
     const charController = new Characters()
 
@@ -20,6 +20,9 @@ async function textController(msg: Message, meta: Metadata) {
         }
         case ('/items'): {
             return commands.commands.getResources(msg)
+        }
+        case ('вызвать на дуэль'): {
+            return commands.commands.makeDuelText(msg)
         }
     }
 }

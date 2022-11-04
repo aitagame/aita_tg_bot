@@ -10,13 +10,15 @@ import getItems from '@handlers/callbackQuery/get_items'
 import makeDuel from './callbackQuery/duel_accept'
 import { makeDuel as inlineDuel } from './inlineQuery/make_duel'
 import acceptDuel from './callbackQuery/duel_accept'
+import makeDuelText from './commands/makeDuel'
 
 
 const commands = {
     getInfo,
     getResources,
     registerUser,
-    actions
+    actions,
+    makeDuelText
 }
 
 const callbackQuerys = {
