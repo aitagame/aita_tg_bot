@@ -9,13 +9,16 @@ async function textController(msg: Message, meta: Metadata) {
 
     const user = await charController.readById(msg.from?.id as number)
 
+    const matches = {
+        getUserInfo: /^(\/start|\/info)/
+    }
+
     if (!user) {
         return commands.commands.registerUser(msg)
     }
 
     switch (text) {
-        case '/start':
-        case '/info': {
+        case text?.match(matches.getUserInfo): {
             return commands.commands.getInfo(msg)
         }
         case ('/items'): {

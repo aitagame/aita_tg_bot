@@ -19,8 +19,10 @@ const acceptDuel = async (query: CallbackQuery) => {
     const senderUserId = query.from.id
     const messageReply = query.message?.reply_to_message
 
-
+    console.log(query)
     
+    bot.answerCallbackQuery(query.id)
+
     if(!messageReply) { // * Check is not private duel
         
     }

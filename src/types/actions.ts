@@ -1,5 +1,5 @@
 
-interface Result {
+interface ActionResult {
     message: string,
     loot: Array<LootType>,
     experience: RangedValue
@@ -19,11 +19,11 @@ interface RangedValue {
 interface LocationAction {
     go_message: string,
     time: number,
-    result: Array<Result>
+    result: Array<ActionResult>
 }
 
 type ActionsType = {
     [key: string]: LocationAction
 }
 
-export { ActionsType, LocationAction, RangedValue, LootType, Result }
+export { ActionsType, LocationAction, RangedValue, LootType, ActionResult }
