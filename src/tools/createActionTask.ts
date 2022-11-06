@@ -1,5 +1,5 @@
 import redis from "@src/config/redis"
-import { userData, StateAdventure } from "@src/types/redisUserData"
+import { UserDataType, StateAdventure } from "@src/types/redisUserData"
 import finishWork from "./finishWork"
 
 
@@ -16,7 +16,7 @@ async function createTask(options: TaskOptions) {
     const end = start + time
 
 
-    const data: userData = {
+    const data: UserDataType = {
         user_id: user_id,
         chat_id: chat_id,
         state: {

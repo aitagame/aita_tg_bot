@@ -19,7 +19,7 @@ export interface StateDuel {
     oponent_user_id: number
 }
 
-export type userData = {
+export type UserDataType = {
     user_id: number
     chat_id: number
     state: StateAdventure | StateIdle | StateDuel

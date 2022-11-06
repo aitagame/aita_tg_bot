@@ -1,6 +1,7 @@
 import { makeDuelTemplate, DuelTemplateType } from "@handlers/templates/makeDuel";
 import Characters from "@sql/charactersDB";
 import bot from "@src/config/bot";
+import { createDuelRequest } from "@tools/createDuelRequest";
 import { InlineKeyboardMarkup, Message } from "node-telegram-bot-api";
 
 async function makeDuel(msg: Message) {
@@ -8,12 +9,9 @@ async function makeDuel(msg: Message) {
     return bot.sendMessage(msg.chat.id, 'In order to start a duel, you must write "Duel" in reply to the opponent\'s message. ')
   }
   const chat_id = msg.chat.id
-
   const users = new Characters()
-
   const duelistFrom = msg.from as Message['from']
   const oponentFrom = msg.reply_to_message.from as Message['from']
-
   const duelistInfo = await users.readById(duelistFrom?.id as number)
   const oponentInfo = await users.readById(oponentFrom?.id as number)
 
@@ -45,6 +43,13 @@ async function makeDuel(msg: Message) {
       inline_keyboard: buttons
     },
     parse_mode: 'Markdown'
+  })
+
+  createDuelRequest({
+    chat_id: chat_id,
+    msg: msg,
+    oponent_user_id: oponentFrom?.id as number,
+    user_id: duelistFrom?.id as number
   })
 }
 

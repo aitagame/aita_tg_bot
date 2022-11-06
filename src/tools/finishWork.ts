@@ -1,6 +1,6 @@
 import redis from '@config/redis'
 import bot from '@src/config/bot'
-import { userData } from '@src/types/redisUserData'
+import { UserDataType } from '@src/types/redisUserData'
 import actionData from '@data/actions.json'
 import getRandomInt from '@tools/getRandomInt'
 import itemsData from '@data/items.json'
@@ -16,7 +16,7 @@ async function finishWork(user_id: number) {
         return
     }
 
-    const workStatus = JSON.parse(redisData) as userData
+    const workStatus = JSON.parse(redisData) as UserDataType
 
     const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>
     const availableActions = getKeys(actionData)
@@ -55,7 +55,7 @@ async function finishWork(user_id: number) {
         ItemController.addItem(user_id, item)
     })
 
-    const modifiedStatus: userData = {
+    const modifiedStatus: UserDataType = {
         chat_id: workStatus.chat_id,
         user_id: workStatus.user_id,
         state: {

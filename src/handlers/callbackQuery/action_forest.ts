@@ -1,7 +1,7 @@
 import { CallbackQuery } from "node-telegram-bot-api";
 import redis from "@config/redis"
 import bot from "@src/config/bot";
-import { userData } from "@src/types/redisUserData";
+import { UserDataType } from "@src/types/redisUserData";
 import actionsData from '@data/actions.json'
 import { sendAnswer } from "../../tools/sendActionAnswer";
 import { createTask, TaskOptions } from "@tools/createActionTask";
@@ -25,7 +25,7 @@ async function goToForest(query: CallbackQuery) {
         return sendAnswer({ chat_id, message_id, query_id: query.id, action: 'forest' })
     }
 
-    const redisData = JSON.parse(response) as userData  // Parse JSON from Redis
+    const redisData = JSON.parse(response) as UserDataType  // Parse JSON from Redis
 
     if (redisData.state.action !== 'idle') {        // If already in action
         bot.answerCallbackQuery(query.id)

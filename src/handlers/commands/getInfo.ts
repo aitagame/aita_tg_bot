@@ -21,7 +21,7 @@ const getInfo = async (msg: Message) => {
 
     const charInfo: CharInfoType = {
         name: userData.name,
-        level: userData.level,
+        level: 0,
         experience: userData.experience,
         maxLevelExperience: 1250,
         element_id: userData.element,
