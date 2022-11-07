@@ -42,7 +42,8 @@ async function makeDuel(msg: Message) {
       resize_keyboard: true,
       inline_keyboard: buttons
     },
-    parse_mode: 'Markdown'
+    parse_mode: 'Markdown',
+    reply_to_message_id: msg.message_id
   })
 
   createDuelRequest({

@@ -17,6 +17,7 @@ export interface StateDuel {
     start: number
     end: number
     oponent_user_id: number
+    timeoutId: NodeJS.Timeout | null
 }
 
 export type UserDataType = {

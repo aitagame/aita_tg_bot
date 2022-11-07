@@ -10,12 +10,20 @@ export interface DuelRequestOtions {
     msg: Message
 }
 
-export function createDuelRequest(options: DuelRequestOtions) {
-    const { user_id, chat_id, oponent_user_id, msg } = options
-    const userActionInfo = redis.get(user_id.toString())
+export async function createDuelRequest(options: DuelRequestOtions) {
+    const { msg } = options
+    const chat_id = msg.chat.id
+    const user_id = msg.from?.id as number
+    const oponent_user_id = msg.reply_to_message?.from?.id as number
+    const userActionInfo = await redis.get(user_id.toString())
+
     const duelDuration = 1000 * 60 * 1
     const start = Date.now()
     const end = start + duelDuration
+
+    const timeout = setTimeout(() => {
+        deleteDuelRequest(msg)
+    }, duelDuration) 
 
     const modifiedData: UserDataType = {
         user_id: user_id,
@@ -24,16 +32,19 @@ export function createDuelRequest(options: DuelRequestOtions) {
             action: 'duel',
             start: start,
             end: end,
-            oponent_user_id: oponent_user_id
+            oponent_user_id: oponent_user_id,
+            timeoutId: null
         },
     }
 
     if (!userActionInfo) {
-        redis.set(user_id.toString(), JSON.stringify(modifiedData))
+        return redis.set(user_id.toString(), JSON.stringify(modifiedData))
     }
 
-    setTimeout(() => {
-        deleteDuelRequest(msg)
-    }, duelDuration)
+    const userData = JSON.parse(userActionInfo) as UserDataType
+    if (userData.state.action !== 'idle') {
+        return
+    }
 
+    redis.set(user_id.toString(), JSON.stringify(modifiedData))
 }

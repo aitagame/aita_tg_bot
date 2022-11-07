@@ -7,13 +7,12 @@ import createMention from './createMention'
 async function deleteDuelRequest(msg: Message) {
     const user_id = msg.from?.id as number
     const redisResponse = await redis.get(user_id.toString())
-    if (!redisResponse) {
-        return
-    }
+
+    if (!redisResponse) return
+
     const userData = JSON.parse(redisResponse) as UserDataType
-    if (userData.state.action !== 'duel') {
-        return
-    }
+
+    if (userData.state.action !== 'duel') return
 
     const modifiedData: UserDataType = {
         chat_id: userData.chat_id,
