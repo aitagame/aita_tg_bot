@@ -1,6 +1,6 @@
 import redis from "@src/config/redis"
 import { UserDataType, StateAdventure } from "@src/types/redisUserData"
-import finishWork from "./finishWork"
+import finishWork from "./actions/finishWork"
 
 
 export type TaskOptions = {

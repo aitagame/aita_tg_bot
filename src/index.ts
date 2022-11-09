@@ -3,7 +3,7 @@ import bot from './config/bot'
 import redis from './config/redis'
 import textController from '@handlers/textController';
 import callbackQueryController from '@handlers/cbQueryController';
-import restoreTasks from '@tools/restoreTasks';
+import restoreTasks from '@tools/actions/restoreTasks';
 import inlineQueryController from '@handlers/inlineQueryController';
 
 async function startServer() {

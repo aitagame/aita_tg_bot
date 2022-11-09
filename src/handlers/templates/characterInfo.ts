@@ -44,11 +44,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     const elementName = elements.find(item => item.id === element_id)?.element as string
 
     const totalBattles = loses + wins
-    let percenteOfWins = ((wins / totalBattles) * 100)
-
-    if (isNaN(percenteOfWins)) {
-        percenteOfWins = 0
-    }
+    const percenteOfWins = ((wins / totalBattles) * 100)
 
     // template =>
 
@@ -61,7 +57,7 @@ ${capitalizeFirstLetter(elementName)} ${name}\n
 💥 Critical damage: x${crit_damage}
 🍃 Chance of evade: ${evade_chance}\n
 🏅 Rating: ${rating}
-Wins: ${wins} Loses: ${loses} (${percenteOfWins}%)\n`
+Wins: ${wins} Loses: ${loses} (${isNaN(percenteOfWins) ? 0 : percenteOfWins}%)\n`
 
     // =>
 

@@ -18,7 +18,7 @@ const actions = async (msg: Message) => {
     }
 
     const keyboard: Array<InlineKeyboardButton[]> = [
-        [{text: 'forest', callback_data:'action_forest'}, {text: "Caves", callback_data: 'action_caves'}]
+        [{ text: 'forest', callback_data: 'action_forest' }, { text: "Caves", callback_data: 'action_caves' }]
     ]
 
     bot.sendMessage(id, 'Available actions:', {

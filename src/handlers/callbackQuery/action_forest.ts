@@ -3,7 +3,7 @@ import redis from "@config/redis"
 import bot from "@src/config/bot";
 import { UserDataType } from "@src/types/redisUserData";
 import actionsData from '@data/actions.json'
-import { sendAnswer } from "../../tools/sendActionAnswer";
+import { sendAnswer } from "../../tools/actions/sendActionAnswer";
 import { createTask, TaskOptions } from "@tools/createActionTask";
 
 

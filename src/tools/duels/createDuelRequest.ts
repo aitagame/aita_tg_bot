@@ -4,9 +4,6 @@ import { Message } from 'node-telegram-bot-api'
 import { deleteDuelRequest } from './deleteDuelRequest'
 
 export interface DuelRequestOtions {
-    user_id: number
-    chat_id: number
-    oponent_user_id: number
     msg: Message
 }
 
@@ -17,7 +14,7 @@ export async function createDuelRequest(options: DuelRequestOtions) {
     const oponent_user_id = msg.reply_to_message?.from?.id as number
     const userActionInfo = await redis.get(user_id.toString())
 
-    const duelDuration = 1000 * 60 * 1
+    const duelDuration = 1000 * 60 * 0.5
     const start = Date.now()
     const end = start + duelDuration
 
@@ -29,11 +26,10 @@ export async function createDuelRequest(options: DuelRequestOtions) {
         user_id: user_id,
         chat_id: chat_id,
         state: {
-            action: 'duel',
+            action: 'duel_pending',
             start: start,
             end: end,
             oponent_user_id: oponent_user_id,
-            timeoutId: null
         },
     }
 

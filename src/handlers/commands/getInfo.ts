@@ -8,11 +8,15 @@ import Characters from "@sql/charactersDB"
 
 const getInfo = async (msg: Message) => {
     const controller = new Characters()
-    const { id } = msg.chat
+    const chat_id = msg.chat.id
 
     if (!msg.from) {
-        throw new Error('Sender undefined')
+        return console.error({
+            error_message: 'Sender is undefined!',
+            message: msg,
+        })
     }
+
     const userData = await controller.readById(msg.from.id)
 
     if (!userData) {
@@ -46,7 +50,7 @@ const getInfo = async (msg: Message) => {
 
     const photo = await getPhotoByElement(charInfo.element_id)
 
-    bot.sendPhoto(id, photo, {
+    bot.sendPhoto(chat_id, photo, {
         caption: replyText,
         reply_to_message_id: msg.message_id,
         reply_markup: {

@@ -13,11 +13,10 @@ export interface StateIdle {
 }
 
 export interface StateDuel {
-    action: 'duel'
+    action: 'duel_pending' | 'duel_battling'
     start: number
     end: number
     oponent_user_id: number
-    timeoutId: NodeJS.Timeout | null
 }
 
 export type UserDataType = {

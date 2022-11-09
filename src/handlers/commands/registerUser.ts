@@ -18,9 +18,8 @@ async function registerUser(msg: Message) {
             name: first_name
         })
         return bot.sendMessage(chat_id, 'User created')
-    } else {
-        getInfo(msg)
-    }
+    } else return getInfo(msg)
+    
 }
 
 export default registerUser
