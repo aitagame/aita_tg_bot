@@ -1,6 +1,8 @@
 import { makeDuelTemplate, DuelTemplateType } from "@handlers/templates/makeDuel";
 import Characters from "@sql/charactersDB";
 import bot from "@src/config/bot";
+import redis from "@src/config/redis";
+import { UserDataType } from "@src/types/redisUserData";
 import { createDuelRequest } from "@tools/duels/createDuelRequest";
 import { InlineKeyboardMarkup, Message } from "node-telegram-bot-api";
 
@@ -15,7 +17,24 @@ async function makeDuel(msg: Message) {
   const duelistInfo = await users.readById(duelistFrom?.id as number)
   const oponentInfo = await users.readById(oponentFrom?.id as number)
 
-  if (!duelistFrom || !oponentFrom) return
+
+  if (!duelistFrom || !oponentFrom) return console.error({
+    duelistFrom: duelistFrom,
+    oponentFrom: oponentFrom
+  })
+  const duelistRedisRequest = await redis.get(duelistFrom?.id.toString())
+  const oponentRedisRequest = await redis.get(oponentFrom?.id.toString())
+
+  if (!duelistRedisRequest || !oponentRedisRequest) return console.error({
+    duelistRedisRequest: duelistRedisRequest,
+    oponentRedisRequest: oponentRedisRequest
+  })
+  const duelistRedisData = JSON.parse(duelistRedisRequest) as UserDataType
+  const oponentRedisData = JSON.parse(oponentRedisRequest) as UserDataType
+
+  if (duelistRedisData.state.action !== 'idle' || oponentRedisData.state.action !== 'idle') {
+    return bot.sendMessage(chat_id, 'You or your oponent is busy now')
+  }
 
   if (!duelistInfo || !oponentInfo) return bot.sendMessage(chat_id, 'You or your opponent does not have a character in the game', {
     reply_to_message_id: msg.message_id

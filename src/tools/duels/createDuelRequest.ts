@@ -14,13 +14,13 @@ export async function createDuelRequest(options: DuelRequestOtions) {
     const oponent_user_id = msg.reply_to_message?.from?.id as number
     const userActionInfo = await redis.get(user_id.toString())
 
-    const duelDuration = 1000 * 60 * 0.5
+    const duelDuration = 1000 * 30
     const start = Date.now()
     const end = start + duelDuration
 
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
         deleteDuelRequest(msg)
-    }, duelDuration) 
+    }, duelDuration)
 
     const modifiedData: UserDataType = {
         user_id: user_id,

@@ -12,7 +12,7 @@ async function deleteDuelRequest(msg: Message) {
 
     const userData = JSON.parse(redisResponse) as UserDataType
 
-    if (userData.state.action !== 'duel_battling') return
+    if (userData.state.action === 'duel_battling') return
 
     const modifiedData: UserDataType = {
         chat_id: userData.chat_id,
@@ -28,7 +28,6 @@ async function deleteDuelRequest(msg: Message) {
     bot.sendMessage(userData.chat_id, `${createMention(msg.from?.first_name as string, user_id)}, The response time for the duel has expired.`, {
         parse_mode: 'Markdown'
     })
-    bot.deleteMessage(msg.chat.id, msg.message_id.toString())
 }
 
 export { deleteDuelRequest }

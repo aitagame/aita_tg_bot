@@ -5,6 +5,8 @@ import ItemsDBController from "@sql/itemsDB"
 import redis from "@src/config/redis"
 import { UserDataType } from "@src/types/redisUserData"
 import createMention from "@tools/createMention"
+import { duelEvent } from "@tools/duels/duelEvent"
+import Characters from "@sql/charactersDB"
 
 /* 
     TODO: 1. Обработать случай принятия дуэли и отмены дуэли
@@ -51,8 +53,11 @@ const acceptDuel = async (query: CallbackQuery) => {
 
     bot.sendMessage(query.message?.chat.id as number, 'Дуэль началась блин')
 
-
     bot.answerCallbackQuery(query.id)
+    const Users = new Characters()
+    const Duelist = await Users.readById(duelistData.user_id)
+    if (!Duelist) return
+    duelEvent(Duelist, Duelist)
 }
 
 export default acceptDuel
