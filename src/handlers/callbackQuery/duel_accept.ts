@@ -1,12 +1,11 @@
-import { CallbackQuery, Message } from "node-telegram-bot-api"
-import { resourceTemplate } from "@handlers/templates/items"
+import { CallbackQuery } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
-import ItemsDBController from "@sql/itemsDB"
 import redis from "@src/config/redis"
 import { UserDataType } from "@src/types/redisUserData"
 import createMention from "@tools/createMention"
 import { duelEvent } from "@tools/duels/duelEvent"
 import Characters from "@sql/charactersDB"
+import { getUserData } from "@tools/redis.getUserData"
 
 /* 
     TODO: 1. Обработать случай принятия дуэли и отмены дуэли
@@ -22,15 +21,17 @@ import Characters from "@sql/charactersDB"
 
 const acceptDuel = async (query: CallbackQuery) => {
     const senderUserId = query.from.id
+    const duelistUserId = query.message?.reply_to_message?.from?.id as number
 
-    const duelistRedis = await redis.get(query.message?.reply_to_message?.from?.id.toString() as string)
-    if (!duelistRedis) return
-    const duelistData = JSON.parse(duelistRedis) as UserDataType
-    if (!duelistData) return
+    const duelistData = await getUserData(duelistUserId)
+    if (!duelistData) return console.error({
+        duelistData
+    })
+
     if (duelistData.state.action !== 'duel_pending') return
-    const { oponent_user_id } = duelistData.state
+    const { oponent_user_id: oponentUserId } = duelistData.state
 
-    if (senderUserId !== oponent_user_id) {
+    if (senderUserId !== oponentUserId) {
         bot.answerCallbackQuery(query.id)
         return bot.sendMessage(
             query.message?.chat.id as number,
@@ -46,18 +47,10 @@ const acceptDuel = async (query: CallbackQuery) => {
         show_alert: true
     })
 
-    const modifiedData: UserDataType = duelistData
-    modifiedData.state.action = 'duel_battling'
-
-    redis.set(query.message?.reply_to_message?.from?.id.toString() as string, JSON.stringify(modifiedData))
-
     bot.sendMessage(query.message?.chat.id as number, 'Дуэль началась блин')
 
     bot.answerCallbackQuery(query.id)
-    const Users = new Characters()
-    const Duelist = await Users.readById(duelistData.user_id)
-    if (!Duelist) return
-    duelEvent(Duelist, Duelist)
+    duelEvent(duelistUserId, oponentUserId, query.message?.chat.id as number)
 }
 
 export default acceptDuel

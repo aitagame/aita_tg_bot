@@ -1,9 +1,8 @@
-import { makeDuelTemplate, DuelTemplateType } from "@handlers/templates/makeDuel";
+import { makeDuelTemplate } from "@handlers/templates/makeDuel";
 import Characters from "@sql/charactersDB";
 import bot from "@src/config/bot";
-import redis from "@src/config/redis";
-import { UserDataType } from "@src/types/redisUserData";
 import { createDuelRequest } from "@tools/duels/createDuelRequest";
+import { getUserData } from "@tools/redis.getUserData";
 import { InlineKeyboardMarkup, Message } from "node-telegram-bot-api";
 
 async function makeDuel(msg: Message) {
@@ -14,29 +13,23 @@ async function makeDuel(msg: Message) {
   const users = new Characters()
   const duelistFrom = msg.from as Message['from'] as Message['from']
   const oponentFrom = msg.reply_to_message.from as Message['from']
-  const duelistInfo = await users.readById(duelistFrom?.id as number)
-  const oponentInfo = await users.readById(oponentFrom?.id as number)
+  const duelistCharacter = await users.readById(duelistFrom?.id as number)
+  const oponentCharacter = await users.readById(oponentFrom?.id as number)
 
 
   if (!duelistFrom || !oponentFrom) return console.error({
     duelistFrom: duelistFrom,
     oponentFrom: oponentFrom
   })
-  const duelistRedisRequest = await redis.get(duelistFrom?.id.toString())
-  const oponentRedisRequest = await redis.get(oponentFrom?.id.toString())
+  const duelistData = await getUserData(duelistFrom.id)
+  const oponentData = await getUserData(oponentFrom.id)
+  if (!duelistData || !oponentData) return console.error({ duelistData, oponentData })
 
-  if (!duelistRedisRequest || !oponentRedisRequest) return console.error({
-    duelistRedisRequest: duelistRedisRequest,
-    oponentRedisRequest: oponentRedisRequest
-  })
-  const duelistRedisData = JSON.parse(duelistRedisRequest) as UserDataType
-  const oponentRedisData = JSON.parse(oponentRedisRequest) as UserDataType
-
-  if (duelistRedisData.state.action !== 'idle' || oponentRedisData.state.action !== 'idle') {
+  if (duelistData.state.action !== 'idle' || oponentData.state.action !== 'idle') {
     return bot.sendMessage(chat_id, 'You or your oponent is busy now')
   }
 
-  if (!duelistInfo || !oponentInfo) return bot.sendMessage(chat_id, 'You or your opponent does not have a character in the game', {
+  if (!duelistCharacter || !oponentCharacter) return bot.sendMessage(chat_id, 'You or your opponent does not have a character in the game', {
     reply_to_message_id: msg.message_id
   })
 
@@ -44,7 +37,7 @@ async function makeDuel(msg: Message) {
     return bot.sendMessage(msg.chat.id, 'You can\'t duel with yourself')
   }
 
-  const templateOptions: DuelTemplateType = {
+  const templateText = makeDuelTemplate({
     duelist: {
       name: duelistFrom?.first_name as string,
       user_id: duelistFrom?.id as number
@@ -53,16 +46,14 @@ async function makeDuel(msg: Message) {
       name: oponentFrom?.first_name as string,
       user_id: oponentFrom?.id as number
     }
-  }
-
-  const duelText = makeDuelTemplate(templateOptions)
+  })
 
   const buttons: InlineKeyboardMarkup['inline_keyboard'] = [
     [{ text: '✅ Accept', callback_data: 'duel_accept' }, { text: '❌ Decline', callback_data: 'duel_decline' }],
     [{ text: '📖 Get info about my oponent', callback_data: 'duel_getInfo' }]
   ]
 
-  bot.sendMessage(chat_id, duelText, {
+  bot.sendMessage(chat_id, templateText, {
     reply_markup: {
       resize_keyboard: true,
       inline_keyboard: buttons
