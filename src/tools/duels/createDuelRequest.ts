@@ -1,5 +1,6 @@
 import redis from '@config/redis'
 import { UserDataType } from '@src/types/redisUserData'
+import { getUserData } from '@tools/redis.getUserData'
 import { Message } from 'node-telegram-bot-api'
 import { deleteDuelRequest } from './deleteDuelRequest'
 
@@ -10,9 +11,10 @@ export interface DuelRequestOtions {
 export async function createDuelRequest(options: DuelRequestOtions) {
     const { msg } = options
     const chat_id = msg.chat.id
-    const user_id = msg.from?.id as number
+    const duelist_user_id = msg.from?.id as number
     const oponent_user_id = msg.reply_to_message?.from?.id as number
-    const userActionInfo = await redis.get(user_id.toString())
+    const duelistActionInfo = await getUserData(duelist_user_id)
+    const oponentActionInfo = await getUserData(oponent_user_id)
 
     const duelDuration = 1000 * 30
     const start = Date.now()
@@ -22,8 +24,8 @@ export async function createDuelRequest(options: DuelRequestOtions) {
         deleteDuelRequest(msg)
     }, duelDuration)
 
-    const modifiedData: UserDataType = {
-        user_id: user_id,
+    const duelistData: UserDataType = {
+        user_id: duelist_user_id,
         chat_id: chat_id,
         state: {
             action: 'duel_pending',
@@ -33,14 +35,25 @@ export async function createDuelRequest(options: DuelRequestOtions) {
         },
     }
 
-    if (!userActionInfo) {
-        return redis.set(user_id.toString(), JSON.stringify(modifiedData))
+    const oponentData: UserDataType = {
+        user_id: oponent_user_id,
+        chat_id: chat_id,
+        state: {
+            action: 'duel_pending',
+            start: start,
+            end: end,
+            oponent_user_id: duelist_user_id
+        }
     }
 
-    const userData = JSON.parse(userActionInfo) as UserDataType
-    if (userData.state.action !== 'idle') {
-        return
+    if (!duelistActionInfo) {
+        return redis.set(duelist_user_id.toString(), JSON.stringify(duelistData))
     }
 
-    redis.set(user_id.toString(), JSON.stringify(modifiedData))
+    if (!oponentActionInfo) {
+        return redis.set(duelist_user_id.toString(), JSON.stringify(duelistData))
+    }
+
+    redis.set(duelist_user_id.toString(), JSON.stringify(duelistData))
+    redis.set(oponent_user_id.toString(), JSON.stringify(oponentData))
 }

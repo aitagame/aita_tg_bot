@@ -28,7 +28,7 @@ const acceptDuel = async (query: CallbackQuery) => {
         duelistData
     })
 
-    if (duelistData.state.action !== 'duel_pending') return
+    if (duelistData.state.action !== 'duel_pending') return bot.answerCallbackQuery(query.id, { text: 'Время ожидания дуэли закончилось' })
     const { oponent_user_id: oponentUserId } = duelistData.state
 
     if (senderUserId !== oponentUserId) {

@@ -12,7 +12,7 @@ async function deleteDuelRequest(msg: Message) {
 
     const userData = JSON.parse(redisResponse) as UserDataType
 
-    if (userData.state.action === 'duel_battling') return
+    if (userData.state.action !== 'duel_pending') return
 
     const modifiedData: UserDataType = {
         chat_id: userData.chat_id,
