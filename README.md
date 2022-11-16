@@ -1,2 +1,2 @@
-# aita_tg_bot
+### aita_tg_bot
 AITA Game TG Bot
