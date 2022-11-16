@@ -1,4 +1,4 @@
-import { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api"
+import { InlineKeyboardButton, Message } from "node-telegram-bot-api"
 import { characterInfoTemplate, CharInfoType } from "@handlers/templates/characterInfo"
 import bot from "@src/config/bot"
 import { getPhotoByElement } from "@tools/getPhotoByElement"
@@ -6,60 +6,63 @@ import elements from '@data/elements.json'
 
 import Characters from "@sql/charactersDB"
 
-const getCharacter = async (query: CallbackQuery) => {
+const getInfo = async (msg: Message) => {
     const controller = new Characters()
-    const chat_id = query.message?.chat.id as number
-    const user_id = query.from.id as number
+    const chat_id = msg.chat.id
 
-    const userData = await controller.readById(user_id)
+    if (!msg.from) {
+        return console.error({
+            error_message: 'Sender is undefined!',
+            message: msg,
+        })
+    }
+
+    const userData = await controller.readById(msg.from.id)
 
     if (!userData) {
-        return bot.answerCallbackQuery(query.id)
+        return bot.sendMessage(msg.chat.id, 'You have not character. Type /start for create one.')
     }
 
     const charInfo: CharInfoType = {
         name: userData.name,
-        level: userData.level,
+        level: 0,
         experience: userData.experience,
         maxLevelExperience: 1250,
         element_id: userData.element,
         armor: userData.armor,
         attack: userData.attack,
         crit_chance: userData.crit_chance,
-        crit_multiplicator: userData.crit_damage,
+        crit_damage: userData.crit_damage,
         evade_chance: userData.evade_chance,
         loses: 0,
         wins: 0,
         rating: userData.rating
     }
 
-    const filename = elements.find(item => item.id === charInfo.element_id)?.element as string
 
     const keyboard: Array<InlineKeyboardButton[]> = [
         [{ text: 'My character', callback_data: 'get_character' }, { text: 'Items', callback_data: 'get_items' }, { text: 'Actions', callback_data: 'get_actions' }]
     ]
 
+    const filename = elements.find(item => item.id === charInfo.element_id)?.element as string
+
     const replyText = characterInfoTemplate(charInfo)
-
-    bot.answerCallbackQuery(query.id)
-
 
     const photo = await getPhotoByElement(charInfo.element_id)
 
     bot.sendPhoto(chat_id, photo, {
         caption: replyText,
-        reply_to_message_id: query.message?.message_id,
+        reply_to_message_id: msg.message_id,
         reply_markup: {
             inline_keyboard: keyboard,
             resize_keyboard: true
-        }
-    },
-    {
-        filename: filename,
-        contentType: 'image/x-png'
-    })
+        },
 
+    }, {
+        filename: filename,
+        contentType: 'image/x-png',
+    })
 
 }
 
-export default getCharacter
+export default getInfo

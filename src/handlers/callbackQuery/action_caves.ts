@@ -1,10 +1,11 @@
 import { CallbackQuery } from "node-telegram-bot-api";
 import redis from "@config/redis"
 import bot from "@src/config/bot";
-import { userData } from "@src/types/redisUserData";
-import { sendAnswer } from "../../tools/sendActionAnswer";
+import { UserDataType } from "@src/types/redisUserData";
+import { sendAnswer } from "../../tools/actions/sendActionAnswer";
 import { createTask, TaskOptions } from "@tools/createActionTask";
 import actionData from '@data/actions.json'
+
 
 async function goToCaves(query: CallbackQuery) {
     const user_id = query.from.id
@@ -23,7 +24,7 @@ async function goToCaves(query: CallbackQuery) {
         createTask(taskOptions)
         return sendAnswer({ chat_id, message_id, query_id: query.id, action: 'caves' })
     }
-    const redisData = JSON.parse(response) as userData  // Parse JSON from Redis
+    const redisData = JSON.parse(response) as UserDataType  // Parse JSON from Redis
 
     if (redisData.state.action !== 'idle') {        // If already in action
         bot.answerCallbackQuery(query.id)

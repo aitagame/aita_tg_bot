@@ -12,7 +12,7 @@ type CharInfoType = {
     attack: number,
     armor: number,
     crit_chance: number
-    crit_multiplicator: number,
+    crit_damage: number,
     evade_chance: number,
 }
 
@@ -31,7 +31,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
         armor,
         attack,
         crit_chance,
-        crit_multiplicator,
+        crit_damage,
         evade_chance,
         experience,
         level,
@@ -44,11 +44,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     const elementName = elements.find(item => item.id === element_id)?.element as string
 
     const totalBattles = loses + wins
-    let percenteOfWins = ((wins / totalBattles) * 100)
-
-    if (isNaN(percenteOfWins)) {
-        percenteOfWins = 0
-    }
+    const percenteOfWins = ((wins / totalBattles) * 100)
 
     // template =>
 
@@ -58,10 +54,10 @@ ${capitalizeFirstLetter(elementName)} ${name}\n
 🗡Attack: ${attack}
 🛡 Defence: ${armor}
 ⚡️ Chance of critical: ${crit_chance}
-💥 Critical damage: x${crit_multiplicator}
+💥 Critical damage: x${crit_damage}
 🍃 Chance of evade: ${evade_chance}\n
 🏅 Rating: ${rating}
-Wins: ${wins} Loses: ${loses} (${percenteOfWins}%)\n`
+Wins: ${wins} Loses: ${loses} (${isNaN(percenteOfWins) ? 0 : percenteOfWins}%)\n`
 
     // =>
 

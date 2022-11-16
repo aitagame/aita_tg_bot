@@ -18,9 +18,6 @@ const getItems = async (msg: Message) => {
     const replyText = resourceTemplate(char.resources)
 
     bot.sendMessage(id, replyText)
-
-
-
 }
 
 export default getItems

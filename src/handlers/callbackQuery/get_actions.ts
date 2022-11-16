@@ -2,13 +2,15 @@ import { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
 
 import Characters from "@sql/charactersDB"
+import { actionsListTemplate } from "@handlers/templates/actionsList"
 
 const getActions = async (query: CallbackQuery) => {
     const controller = new Characters()
     const chat_id = query.message?.chat.id as number
     const user_id = query.from.id as number
     const keyboard: Array<InlineKeyboardButton[]> = [
-        [{ text: 'Forest', callback_data: 'action_forest' }, { text: "Caves", callback_data: 'action_caves' }]
+        [{ text: 'Forest', callback_data: 'action_forest' }, { text: "Caves", callback_data: 'action_caves' }],
+        [{text: '<< Back', callback_data: 'get_character'}]
     ]
     
     const userData = await controller.readById(user_id)
@@ -18,17 +20,12 @@ const getActions = async (query: CallbackQuery) => {
 
     bot.answerCallbackQuery(query.id)
 
-    bot.sendMessage(chat_id, 'Available actions:', {
+    bot.sendMessage(chat_id, actionsListTemplate(), {
         reply_to_message_id: query.message?.message_id,
         reply_markup: {
             inline_keyboard: keyboard,
             resize_keyboard: true
         }
-    })
-
-    bot.editMessageCaption('Available actions', {
-        message_id: query.message?.message_id,
-        chat_id: query.message?.chat.id
     })
 
 }
