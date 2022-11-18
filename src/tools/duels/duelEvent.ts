@@ -20,7 +20,6 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
     const oponentUserData = await getUserData(oponentUserId)
 
     const Users = new Characters()
-    const oponents = await Users.readAll()
     const duelistCharacter = await Users.readById(duelistUserId)
     const oponentCharacter = await Users.readById(oponentUserId)
     //
@@ -63,8 +62,8 @@ function simulateDuelEvent(duelist: CharsType, oponent: CharsType) {
     let oponent_hp = 100
 
     while (duelist_hp > 0 && oponent_hp > 0) {
-        const duelistDamage = getRandomInt(10, 24)
-        const oponentDamage = getRandomInt(10, 24)
+        const duelistDamage = blockedDamage(duelist.attack, oponent.armor)
+        const oponentDamage = blockedDamage(oponent.attack, duelist.armor)
 
         duelist_hp -= oponentDamage
         oponent_hp -= duelistDamage
@@ -74,6 +73,17 @@ function simulateDuelEvent(duelist: CharsType, oponent: CharsType) {
     }
     const winner = duelist_hp > oponent_hp ? duelist.name : oponent.name
     return { roundsMessages, winner }
+}
+
+function getPecrent(number: number, percent: number) {
+    return number * (percent / 100)
+}
+
+function blockedDamage(attack: number, armor: number) {
+    while(armor--){
+        attack -= Math.ceil(getPecrent(attack, 10))
+    }
+    return attack + 1
 }
 
 export { duelEvent }
