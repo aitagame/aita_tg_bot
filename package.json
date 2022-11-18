@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "cross-env NODE_ENV=prod node dist/index.js",
+    "start": "cross-env NODE_ENV=prod node build/index.js",
     "dev": "cross-env NODE_ENV=dev nodemon src/index.ts"
   },
   "repository": {
