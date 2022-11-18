@@ -1,27 +1,25 @@
-import redis from '@config/redis'
 import bot from '@src/config/bot'
 import { UserDataType } from '@src/types/redisUserData'
 import actionData from '@data/actions.json'
 import getRandomInt from '@tools/getRandomInt'
-import itemsData from '@data/items.json'
 import { ItemDB } from '@src/types/items'
 import ItemsDBController from '@sql/itemsDB'
 import Characters from '@sql/charactersDB'
 import { actionRewardsTemplate } from '@handlers/templates/actionRewards'
+import { UserDataController } from '@tools/redisController'
 
 async function finishWork(user_id: number) {
-    const redisData = await redis.get(user_id.toString())
+    const user = new UserDataController(user_id)
+    const userData = await user.get()
 
-    if (!redisData) {
+    if (!userData) {
         return
     }
-
-    const workStatus = JSON.parse(redisData) as UserDataType
 
     const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>
     const availableActions = getKeys(actionData)
     const currentAction = availableActions.find(item => {
-        return item === workStatus.state.action
+        return item === userData.state.action
     })
 
     if (!currentAction) {
@@ -56,8 +54,8 @@ async function finishWork(user_id: number) {
     })
 
     const modifiedStatus: UserDataType = {
-        chat_id: workStatus.chat_id,
-        user_id: workStatus.user_id,
+        chat_id: userData.chat_id,
+        user_id: userData.user_id,
         state: {
             action: 'idle',
             start: null,
@@ -67,8 +65,8 @@ async function finishWork(user_id: number) {
 
     const rewardsTemplate = actionRewardsTemplate(rewards, recievedExperience, result) // * Create template of rewards
 
-    redis.set(user_id.toString(), JSON.stringify(modifiedStatus))
-    bot.sendMessage(workStatus.chat_id, rewardsTemplate)
+    user.update(modifiedStatus)
+    bot.sendMessage(userData.chat_id, rewardsTemplate)
 }
 
 export default finishWork

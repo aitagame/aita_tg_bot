@@ -1,6 +1,6 @@
 import redis from "@src/config/redis"
 import finishWork from "./finishWork"
-import { UserDataType } from 'types/redisUserData'
+import { UserDataController } from "@tools/redisController"
 
 async function restoreTasks() {
     const keysList = await redis.keys('*')
@@ -8,8 +8,8 @@ async function restoreTasks() {
         return
     }
     keysList.forEach(async (item) => {
-        const response = await redis.get(item) as string
-        const userData = JSON.parse(response) as UserDataType
+        const user = new UserDataController(parseInt(item))
+        const userData = await user.get()
 
         if (userData.state.action === 'idle' || userData.state.start === null || userData.state.end === null) {
             return

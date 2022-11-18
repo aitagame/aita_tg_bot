@@ -1,6 +1,6 @@
-import redis from "@src/config/redis"
 import { UserDataType, StateAdventure } from "@src/types/redisUserData"
 import finishWork from "./actions/finishWork"
+import { UserDataController } from "./redisController"
 
 
 export type TaskOptions = {
@@ -12,6 +12,7 @@ export type TaskOptions = {
 
 async function createTask(options: TaskOptions) {
     const { action, chat_id, time, user_id } = options
+    const user = new UserDataController(user_id)
     const start = Date.now()
     const end = start + time
 
@@ -26,7 +27,7 @@ async function createTask(options: TaskOptions) {
         }
     }
 
-    redis.set(user_id.toString(), JSON.stringify(data))
+    user.update(data)
 
     setTimeout(() => {
         finishWork(user_id)

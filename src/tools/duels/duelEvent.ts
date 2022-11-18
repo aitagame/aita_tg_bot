@@ -3,8 +3,7 @@ import bot from "@src/config/bot"
 import redis from "@src/config/redis"
 import { CharacterType } from "@src/types/character"
 import { Users } from "@src/types/sqltypes"
-import getRandomInt from "@tools/getRandomInt"
-import { getUserData } from "@tools/redis.getUserData"
+import { UserData, UserDataController } from "@tools/redisController"
 
 /*
     //TODO: Изменить состояние персонажей с idle в duel_battling
@@ -16,8 +15,10 @@ import { getUserData } from "@tools/redis.getUserData"
 */
 
 async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: number | string) {
-    const duelistUserData = await getUserData(duelistUserId)
-    const oponentUserData = await getUserData(oponentUserId)
+    const duelist = new UserDataController(duelistUserId)
+    const oponent = new UserDataController(oponentUserId)
+    const duelistUserData = await duelist.get()
+    const oponentUserData = await oponent.get()
 
     const Users = new Characters()
     const duelistCharacter = await Users.readById(duelistUserId)
@@ -28,8 +29,8 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
 
     duelistUserData.state.action = oponentUserData.state.action = 'duel_battling'
 
-    await redis.set(duelistUserId.toString(), JSON.stringify(duelistUserData))
-    await redis.set(oponentUserId.toString(), JSON.stringify(oponentUserData))
+    await duelist.update(duelistUserData)
+    await oponent.update(oponentUserData)
 
     const results = simulateDuelEvent(duelistCharacter, oponentCharacter)
     let createdMessage = await bot.sendMessage(chat_id, results.roundsMessages[0])
@@ -46,8 +47,8 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
             clearInterval(interval)
             duelistUserData.state.action = 'idle'
             oponentUserData.state.action = 'idle'
-            redis.set(duelistUserId.toString(), JSON.stringify(duelistUserData))
-            redis.set(oponentUserId.toString(), JSON.stringify(oponentUserData))
+            duelist.update(duelistUserData)
+            oponent.update(oponentUserData)
             bot.sendMessage(chat_id, `${results.winner} win!`)
         }
     }, 1000)
@@ -80,7 +81,7 @@ function getPecrent(number: number, percent: number) {
 }
 
 function blockedDamage(attack: number, armor: number) {
-    while(armor--){
+    while (armor--) {
         attack -= Math.ceil(getPecrent(attack, 10))
     }
     return attack + 1

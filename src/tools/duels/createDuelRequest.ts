@@ -1,6 +1,6 @@
 import redis from '@config/redis'
 import { UserDataType } from '@src/types/redisUserData'
-import { getUserData } from '@tools/redis.getUserData'
+import { UserDataController } from '@tools/redisController'
 import { Message } from 'node-telegram-bot-api'
 import { deleteDuelRequest } from './deleteDuelRequest'
 
@@ -13,8 +13,8 @@ export async function createDuelRequest(options: DuelRequestOtions) {
     const chat_id = msg.chat.id
     const duelist_user_id = msg.from?.id as number
     const oponent_user_id = msg.reply_to_message?.from?.id as number
-    const duelistActionInfo = await getUserData(duelist_user_id)
-    const oponentActionInfo = await getUserData(oponent_user_id)
+    const duelist = new UserDataController(duelist_user_id)
+    const oponent = new UserDataController(oponent_user_id)
 
     const duelDuration = 1000 * 30
     const start = Date.now()
@@ -46,14 +46,6 @@ export async function createDuelRequest(options: DuelRequestOtions) {
         }
     }
 
-    if (!duelistActionInfo) {
-        return redis.set(duelist_user_id.toString(), JSON.stringify(duelistData))
-    }
-
-    if (!oponentActionInfo) {
-        return redis.set(duelist_user_id.toString(), JSON.stringify(duelistData))
-    }
-
-    redis.set(duelist_user_id.toString(), JSON.stringify(duelistData))
-    redis.set(oponent_user_id.toString(), JSON.stringify(oponentData))
+    duelist.update(duelistData)
+    oponent.update(oponentData)
 }

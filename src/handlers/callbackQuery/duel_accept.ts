@@ -1,11 +1,8 @@
 import { CallbackQuery } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
-import redis from "@src/config/redis"
-import { UserDataType } from "@src/types/redisUserData"
 import createMention from "@tools/createMention"
 import { duelEvent } from "@tools/duels/duelEvent"
-import Characters from "@sql/charactersDB"
-import { getUserData } from "@tools/redis.getUserData"
+import { UserDataController } from "@tools/redisController"
 
 /* 
     TODO: 1. Обработать случай принятия дуэли и отмены дуэли
@@ -23,7 +20,9 @@ const acceptDuel = async (query: CallbackQuery) => {
     const senderUserId = query.from.id
     const duelistUserId = query.message?.reply_to_message?.from?.id as number
 
-    const duelistData = await getUserData(duelistUserId)
+    const user = new UserDataController(duelistUserId)
+
+    const duelistData = await user.get()
     if (!duelistData) return console.error({
         duelistData
     })

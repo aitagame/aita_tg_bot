@@ -5,12 +5,14 @@ import Characters from "@sql/charactersDB"
 import getInfo from "./getInfo"
 import redis from "@src/config/redis"
 import { UserDataType } from "@src/types/redisUserData"
+import { UserDataController } from "@tools/redisController"
 
 async function registerUser(msg: Message) {
     const dbCharacters = new Characters()
 
     const { id: chat_id } = msg.chat
     const { id: user_id, first_name } = msg.from as User
+    const userData = new UserDataController(user_id)
 
     const charatcter = await dbCharacters.readById(user_id)
     if (!charatcter) {
@@ -30,9 +32,10 @@ async function registerUser(msg: Message) {
             chat_id: msg.chat.id
         }
 
-        await redis.set(user_id.toString(), JSON.stringify(defaultUserData))
+        await userData.update(defaultUserData)
 
         return bot.sendMessage(chat_id, 'User created')
+        
     } else return getInfo(msg)
 
 }
