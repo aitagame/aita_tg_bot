@@ -1,6 +1,5 @@
 import Characters from "@sql/charactersDB"
 import bot from "@src/config/bot"
-import redis from "@src/config/redis"
 import { CharacterType } from "@src/types/character"
 import { Users } from "@src/types/sqltypes"
 import { UserData, UserDataController } from "@tools/redisController"
@@ -10,7 +9,7 @@ import { UserData, UserDataController } from "@tools/redisController"
     //TODO: Провести сражение
     //TODO: Изменить состояние персонажей с duel_battling в idle
     //TODO: Выдать результаты сражения
-    TODO: Сбалансировать урон и защиту (Проработать систему урона в целом)
+    //TODO: Сбалансировать урон и защиту (Проработать систему урона в целом)
     * Сейчас урон совершенно случайный.
 */
 

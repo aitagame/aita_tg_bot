@@ -1,10 +1,9 @@
 import { CallbackQuery } from "node-telegram-bot-api";
-import redis from "@config/redis"
 import bot from "@src/config/bot";
-import { UserDataType } from "@src/types/redisUserData";
 import { sendAnswer } from "../../tools/actions/sendActionAnswer";
 import { createTask, TaskOptions } from "@tools/createActionTask";
 import actionData from '@data/actions.json'
+import { UserDataController } from "@tools/redisController";
 
 
 async function goToCaves(query: CallbackQuery) {
@@ -17,16 +16,10 @@ async function goToCaves(query: CallbackQuery) {
         user_id: user_id,
         action: 'caves'
     }
+    const user = new UserDataController(user_id)
+    const userData = await user.get()
 
-    const response = await redis.get(user_id.toString())
-
-    if (!response) {        // If no data about user state
-        createTask(taskOptions)
-        return sendAnswer({ chat_id, message_id, query_id: query.id, action: 'caves' })
-    }
-    const redisData = JSON.parse(response) as UserDataType  // Parse JSON from Redis
-
-    if (redisData.state.action !== 'idle') {        // If already in action
+    if (userData.state.action !== 'idle') {        // If already in action
         bot.answerCallbackQuery(query.id)
         return bot.sendMessage(chat_id, 'You already in adventure')
     }
