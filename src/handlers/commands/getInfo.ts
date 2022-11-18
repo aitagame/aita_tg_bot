@@ -5,6 +5,7 @@ import { getPhotoByElement } from "@tools/getPhotoByElement"
 import elements from '@data/elements.json'
 
 import Characters from "@sql/charactersDB"
+import { getLevel, nextLevelExperience } from "@tools/levels"
 
 const getInfo = async (msg: Message) => {
     const controller = new Characters()
@@ -25,9 +26,9 @@ const getInfo = async (msg: Message) => {
 
     const charInfo: CharInfoType = {
         name: userData.name,
-        level: 0,
+        level: getLevel(userData.experience),
         experience: userData.experience,
-        maxLevelExperience: 1250,
+        maxLevelExperience: nextLevelExperience(userData.experience),
         element_id: userData.element,
         armor: userData.armor,
         attack: userData.attack,

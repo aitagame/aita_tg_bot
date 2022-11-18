@@ -5,6 +5,7 @@ import { getPhotoByElement } from "@tools/getPhotoByElement"
 import elements from '@data/elements.json'
 
 import Characters from "@sql/charactersDB"
+import { getLevel, nextLevelExperience } from "@tools/levels"
 
 const getCharacter = async (query: CallbackQuery) => {
     const controller = new Characters()
@@ -37,10 +38,10 @@ const getCharacter = async (query: CallbackQuery) => {
         element_id: element,
         evade_chance,
         experience,
-        level: 1,
+        level: getLevel(experience),
         loses: 0,
         wins: 0,
-        maxLevelExperience: 150,
+        maxLevelExperience: nextLevelExperience(experience),
         name,
         rating
     }
