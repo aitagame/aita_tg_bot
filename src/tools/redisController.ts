@@ -34,7 +34,6 @@ export class UserData {
     }
 }
 
-
 export class UserDataController {
     user_id!: number
 
@@ -43,9 +42,21 @@ export class UserDataController {
     }
 
     get(): Promise<UserData> {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             const userData = await redis.get(this.user_id.toString())
-            if (!userData) return reject(new Error('User data is not defined!'))
+            if (!userData) {
+                const defaultUserData = new UserData({
+                    user_id: this.user_id,
+                    chat_id: 0,
+                    state: {
+                        action: 'idle',
+                        start: null,
+                        end: null
+                    }
+                })
+                this.update(defaultUserData)
+                return resolve(defaultUserData)
+            }
             const data: UserData = JSON.parse(userData)
             resolve(new UserData({ ...data }))
         })
