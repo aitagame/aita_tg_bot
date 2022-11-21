@@ -3,7 +3,6 @@ import bot from "@src/config/bot"
 import { Message, User } from "node-telegram-bot-api"
 import Characters from "@sql/charactersDB"
 import getInfo from "./getInfo"
-import redis from "@src/config/redis"
 import { UserDataType } from "@src/types/redisUserData"
 import { UserDataController } from "@tools/redisController"
 

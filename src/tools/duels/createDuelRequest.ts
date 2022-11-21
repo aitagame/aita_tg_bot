@@ -1,4 +1,3 @@
-import redis from '@config/redis'
 import { UserDataType } from '@src/types/redisUserData'
 import { UserDataController } from '@tools/redisController'
 import { Message } from 'node-telegram-bot-api'
