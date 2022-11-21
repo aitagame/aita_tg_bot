@@ -5,6 +5,7 @@ import textController from '@handlers/textController';
 import callbackQueryController from '@handlers/cbQueryController';
 import restoreTasks from '@tools/actions/restoreTasks';
 import inlineQueryController from '@handlers/inlineQueryController';
+import { flushDuelsAfterRestart } from '@tools/flushDuelsAfterRestart'
 
 async function startServer() {
     try {
@@ -21,6 +22,7 @@ async function startServer() {
 startServer()
     .then(async () => {
         await restoreTasks()
+        await flushDuelsAfterRestart()
     })
     .then(() => {
         bot.on('text', textController)
