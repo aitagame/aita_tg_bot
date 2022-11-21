@@ -2,6 +2,7 @@ import Characters from "@sql/charactersDB"
 import bot from "@src/config/bot"
 import { CharacterType } from "@src/types/character"
 import { Users } from "@src/types/sqltypes"
+import getRandomInt from "@tools/getRandomInt"
 import { UserData, UserDataController } from "@tools/redisController"
 
 /*
@@ -50,7 +51,7 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
             oponent.update(oponentUserData)
             bot.sendMessage(chat_id, `${results.winner} win!`)
         }
-    }, 1000)
+    }, 3000)
 
 }
 
@@ -62,14 +63,19 @@ function simulateDuelEvent(duelist: CharsType, oponent: CharsType) {
     let oponent_hp = 100
 
     while (duelist_hp > 0 && oponent_hp > 0) {
-        const duelistDamage = blockedDamage(duelist.attack, oponent.armor)
-        const oponentDamage = blockedDamage(oponent.attack, duelist.armor)
+        const duelistDamage = calculateFinalDamage(duelist, oponent)
+        const oponentDamage = calculateFinalDamage(oponent, duelist)
 
-        duelist_hp -= oponentDamage
-        oponent_hp -= duelistDamage
+        duelist_hp -= oponentDamage.damage
+        oponent_hp -= duelistDamage.damage
 
-        const message = `${duelist.name} ${duelist_hp}❤️ | ${oponent.name} ${oponent_hp}❤️`
-        roundsMessages.push(message)
+        const currentHPLog = `${duelist.name} ${duelist_hp}❤️ | ${oponent.name} ${oponent_hp}❤️`
+        const criticalLog = (name: string, extraDamage: number) => { return `⚡️ ${name} deal critical damage! (+${extraDamage})` }
+
+        const duelistCritLog = duelistDamage.isCritical ? criticalLog(duelist.name, duelistDamage.critDamage) : undefined
+        const oponentCritLog = oponentDamage.isCritical ? criticalLog(oponent.name, oponentDamage.critDamage) : undefined
+        const finalMessage = [currentHPLog, duelistCritLog, oponentCritLog].filter(item => item).join('\n')
+        roundsMessages.push(finalMessage)
     }
     const winner = duelist_hp > oponent_hp ? duelist.name : oponent.name
     return { roundsMessages, winner }
@@ -84,6 +90,19 @@ function blockedDamage(attack: number, armor: number) {
         attack -= Math.ceil(getPecrent(attack, 10))
     }
     return attack + 1
+}
+
+function isCriricalDamage(character: CharsType) {
+    return getRandomInt(0, 100) < character.crit_chance
+}
+
+function calculateFinalDamage(character: CharsType, oponent: CharsType) {
+    let damage = blockedDamage(character.attack, oponent.armor)
+    const isCritical = isCriricalDamage(character)
+    if (isCritical) damage *= character.crit_damage
+    const critDamage = damage / character.crit_damage
+
+    return { damage, isCritical, critDamage }
 }
 
 export { duelEvent }
