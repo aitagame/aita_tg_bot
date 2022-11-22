@@ -1,72 +1,11 @@
 import { UsersFromDB } from "@src/types/sqltypes"
 import { getPecrent } from "@tools/getPercent"
-import getRandomInt from "@tools/getRandomInt"
 import { getLevel } from "@tools/levels"
-
-class Health {
-    private readonly baseHealth = 100
-    private readonly hpPerLevel = 4
-    private level: number
-    constructor(level: number) {
-        this.level = level
-    }
-    get hp() {
-        return this.baseHealth + (this.level * this.hpPerLevel)
-    }
-}
-
-class Attack {
-    private baseAttack = 10
-    private attackPerLevel = 3.5
-    private level: number
-    constructor(level: number) {
-        this.level = level
-    }
-
-    get attack() {
-        return this.baseAttack + (this.level * this.attackPerLevel)
-    }
-}
-
-class Armor {
-    private baseArmor = 1
-    private armorPerLevel = 0.5
-    private level: number
-    constructor(level: number) {
-        this.level = level
-    }
-
-    get armor() {
-        return this.baseArmor + (this.armorPerLevel * this.level)
-    }
-}
-
-class Critical {
-    private readonly baseDamage = 2
-    private readonly baseChance = 5
-    constructor() {
-    }
-    get chance() {
-        return this.baseChance
-    }
-    get damage() {
-        return this.baseDamage
-    }
-
-    isCritical() {
-        return getRandomInt(0, 100) < this.chance
-    }
-}
-
-class Evade {
-    chance = 0
-    constructor() {
-    }
-
-    isEvaded() {
-        return getRandomInt(0, 100) < this.chance
-    }
-}
+import { Armor } from "./stats/armor"
+import { Attack } from "./stats/attack"
+import { Critical } from "./stats/critical"
+import { Evade } from "./stats/evade"
+import { Health } from "./stats/health"
 
 export class Character {
     readonly user_id: number
@@ -120,7 +59,7 @@ export class Character {
         const isCritical = this.critical.isCritical()
         if (isCritical) damage *= this.critical.damage
 
-        return { damage, isCritical, criticalDamage}
+        return { damage, isCritical, criticalDamage }
     }
 
 }
