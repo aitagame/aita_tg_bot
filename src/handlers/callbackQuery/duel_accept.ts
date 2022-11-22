@@ -1,20 +1,13 @@
 import { CallbackQuery } from "node-telegram-bot-api"
 import bot from "@src/config/bot"
-import createMention from "@tools/createMention"
-import { duelEvent } from "@tools/duels/duelEvent"
+import { duelEvent } from "@tools/duels/duelEvent/duelEvent"
 import { UserDataController } from "@tools/redisController"
 
-/* 
-    TODO: 1. Обработать случай принятия дуэли и отмены дуэли
-    TODO: 2. Обработать случай приватной или публичной дуэли (основываясь на наличии реплая)
-    TODO: 3. Игнорить тех, кто  нажал на кнопку не предназначенную ему
-    TODO: 4. Отработать кейс, если дуэль была отправлена самому себе
-    // ? Нужен ли шаблонизатор здесь?
-    ! Будет локализация.
-    
-    * Вызываемый не может быть ботом.
-    * У вызываемого должен быть аккаунт в боте.
-*/
+
+/**
+ * The function handles query duel_accept.
+ * @param query Telegram query
+ */
 
 const acceptDuel = async (query: CallbackQuery) => {
     const senderUserId = query.from.id
@@ -27,24 +20,24 @@ const acceptDuel = async (query: CallbackQuery) => {
         duelistData
     })
 
-    if (duelistData.state.action !== 'duel_pending') return bot.answerCallbackQuery(query.id, { text: 'Время ожидания дуэли закончилось' })
+    if (duelistData.state.action !== 'duel_pending') {
+        bot.answerCallbackQuery(query.id, { text: 'Time for duel was expired.' })
+        return;
+    }
     const { oponent_user_id: oponentUserId } = duelistData.state
 
     if (senderUserId !== oponentUserId) {
         bot.answerCallbackQuery(query.id)
-        return bot.sendMessage(
-            query.message?.chat.id as number,
-            `${createMention(query.from.first_name, senderUserId)}, кнопка предназначается не тебе!`,
+        bot.answerCallbackQuery(
+            query.id,
             {
-                parse_mode: 'Markdown'
+                text: 'This request is not for you!'
             }
         )
+        return;
     }
 
-    bot.answerCallbackQuery(query.id, {
-        text: '*Дуэль якобы началась*',
-        show_alert: true
-    })
+    bot.answerCallbackQuery(query.id)
 
     bot.sendMessage(query.message?.chat.id as number, 'Дуэль началась блин')
 
