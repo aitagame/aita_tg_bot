@@ -1,23 +1,27 @@
 import { Message } from "node-telegram-bot-api"
 import { resourceTemplate } from "@handlers/templates/items"
 import bot from "@src/config/bot"
-import Characters from "@sql/charactersDB"
+import ItemsDBController from "@sql/itemsDB"
 
 const getItems = async (msg: Message) => {
-    if (!msg.from) {
-        throw new Error('Sender undefined')
-    }
-    const { id } = msg.chat
+    if (!msg.from) return;
 
-    const charController = new Characters()
+    const user_id = msg.from.id as number
+    const chat_id = msg.chat.id as number
 
-    const char = await charController.readById(msg.from.id)
+    const itemsController = new ItemsDBController()
+    const UserInventory = await itemsController.readById(user_id)
 
-    if (!char) return bot.sendMessage(msg.chat.id, 'You have no character. Type /start to get one.')
+    if (!UserInventory) return bot.sendMessage(chat_id, 'You have no character. Type /start to get one.')
 
-    const replyText = resourceTemplate(char.resources)
-
-    bot.sendMessage(id, replyText)
+    const replyText = resourceTemplate(UserInventory)
+    bot.sendMessage(chat_id, replyText, {
+        reply_to_message_id: msg.message_id,
+        reply_markup: {
+            resize_keyboard: true,
+            inline_keyboard: [[{ text: "<< Back", callback_data: 'get_character' }]]
+        }
+    })
 }
 
 export default getItems
