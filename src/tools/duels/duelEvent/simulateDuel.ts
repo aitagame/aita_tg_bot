@@ -1,5 +1,4 @@
-import { Users } from "@src/types/sqltypes"
-import { calculateFinalDamage } from "./calculateFinalDamage"
+import { Character } from "@src/classes/character"
 
 /**
  *  Simulation of battle process
@@ -8,26 +7,24 @@ import { calculateFinalDamage } from "./calculateFinalDamage"
  * @returns 
  */
 
-export function simulateDuel(duelist: Users, oponent: Users) {
+export function simulateDuel(duelist: Character, oponent: Character) {
     const roundsMessages: string[] = []
-    let duelist_hp = 100
-    let oponent_hp = 100
 
-    while (duelist_hp > 0 && oponent_hp > 0) {
-        const duelistDamage = calculateFinalDamage(duelist, oponent)
-        const oponentDamage = calculateFinalDamage(oponent, duelist)
+    while (duelist.hp > 0 && oponent.hp > 0) {
+        const duelistDamage = duelist.dealDamage()
+        const oponentDamage = oponent.dealDamage()
 
-        duelist_hp -= oponentDamage.damage
-        oponent_hp -= duelistDamage.damage
+        duelist.getDamage(oponentDamage.damage)
+        oponent.getDamage(duelistDamage.damage)
 
-        const currentHPLog = `${duelist.name} ${duelist_hp}❤️ | ${oponent.name} ${oponent_hp}❤️`
+        const currentHPLog = `${duelist.name} ${duelist.hp}❤️ | ${oponent.name} ${oponent.hp}❤️`
         const criticalLog = (name: string, extraDamage: number) => { return `⚡️ ${name} deal critical damage! (+${extraDamage})` }
 
-        const duelistCritLog = duelistDamage.isCritical ? criticalLog(duelist.name, duelistDamage.critDamage) : undefined
-        const oponentCritLog = oponentDamage.isCritical ? criticalLog(oponent.name, oponentDamage.critDamage) : undefined
+        const duelistCritLog = duelistDamage.isCritical ? criticalLog(duelist.name, duelistDamage.criticalDamage) : undefined
+        const oponentCritLog = oponentDamage.isCritical ? criticalLog(oponent.name, oponentDamage.criticalDamage) : undefined
         const finalMessage = [currentHPLog, duelistCritLog, oponentCritLog].filter(item => item).join('\n')
         roundsMessages.push(finalMessage)
     }
-    const winner = duelist_hp > oponent_hp ? duelist.name : oponent.name
+    const winner = duelist.hp > oponent.hp ? duelist.name : oponent.name
     return { roundsMessages, winner }
 }

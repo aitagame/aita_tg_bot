@@ -6,6 +6,7 @@ import elements from '@data/elements.json'
 
 import Characters from "@sql/charactersDB"
 import { getLevel, nextLevelExperience } from "@tools/levels"
+import { Character } from "@src/classes/character"
 
 const getInfo = async (msg: Message) => {
     const controller = new Characters()
@@ -24,20 +25,22 @@ const getInfo = async (msg: Message) => {
         return bot.sendMessage(msg.chat.id, 'You have not character. Type /start for create one.')
     }
 
+    const userCharacter = new Character(userData)
+
     const charInfo: CharInfoType = {
-        name: userData.name,
-        level: getLevel(userData.experience),
-        experience: userData.experience,
-        maxLevelExperience: nextLevelExperience(userData.experience),
-        element_id: userData.element,
-        armor: userData.armor,
-        attack: userData.attack,
-        crit_chance: userData.crit_chance,
-        crit_damage: userData.crit_damage,
-        evade_chance: userData.evade_chance,
+        armor: userCharacter.armor,
+        attack: userCharacter.attack,
+        crit_chance: userCharacter.critical.chance,
+        crit_damage: userCharacter.critical.damage,
+        element_id: userCharacter.element,
+        evade_chance: userCharacter.evade_chance.chance,
+        experience: userCharacter.experience,
+        level: userCharacter.level,
         loses: 0,
         wins: 0,
-        rating: userData.rating
+        maxLevelExperience: nextLevelExperience(userCharacter.experience),
+        name: userCharacter.name,
+        rating: userCharacter.rating
     }
 
 

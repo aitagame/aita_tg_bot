@@ -53,7 +53,7 @@ ${capitalizeFirstLetter(elementName)} ${name}\n
 🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
 🗡Attack: ${attack}
 🛡 Defence: ${armor}
-⚡️ Chance of critical: ${crit_chance}
+⚡️ Chance of critical: ${crit_chance}%
 💥 Critical damage: x${crit_damage}
 🍃 Chance of evade: ${evade_chance}\n
 🏅 Rating: ${rating}

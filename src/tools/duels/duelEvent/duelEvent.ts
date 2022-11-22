@@ -1,4 +1,5 @@
 import Characters from "@sql/charactersDB"
+import { Character } from "@src/classes/character"
 import bot from "@src/config/bot"
 import { UserDataController } from "@tools/redisController"
 import { simulateDuel } from "./simulateDuel"
@@ -20,15 +21,18 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
     const oponentUserData = await oponent.get()
 
     const Users = new Characters()
-    const duelistCharacter = await Users.readById(duelistUserId)
-    const oponentCharacter = await Users.readById(oponentUserId)
+    const duelistData = await Users.readById(duelistUserId)
+    const oponentData = await Users.readById(oponentUserId)
 
     //
 
     // Check is users characters exists
-    if (!duelistCharacter || !oponentCharacter) return console.error('duelEvent characters: ', duelistCharacter, oponentCharacter)
+    if (!duelistData || !oponentData) return console.error('duelEvent characters: ', duelistData, oponentData)
     if (!duelistUserData || !oponentUserData) return console.error('duelEvent users data ', duelistUserData, oponentUserData)
     //
+
+    const duelistCharacter = new Character(duelistData)
+    const oponentCharacter = new Character(oponentData)
 
     duelistUserData.state.action = oponentUserData.state.action = 'duel_battling' //modifing states of users
 

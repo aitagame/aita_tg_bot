@@ -5,45 +5,36 @@ import { getPhotoByElement } from "@tools/getPhotoByElement"
 import elements from '@data/elements.json'
 
 import Characters from "@sql/charactersDB"
-import { getLevel, nextLevelExperience } from "@tools/levels"
+import { nextLevelExperience } from "@tools/levels"
+import { Character } from "@src/classes/character"
 
 const getCharacter = async (query: CallbackQuery) => {
     const controller = new Characters()
     const chat_id = query.message?.chat.id as number
     const user_id = query.from.id as number
 
-    const userData = await controller.readById(user_id)
+    const User = await controller.readById(user_id)
 
-    if (!userData) {
+    if (!User) {
         return bot.answerCallbackQuery(query.id)
     }
 
-    const {
-        armor,
-        attack,
-        crit_chance,
-        crit_damage,
-        element,
-        evade_chance,
-        experience,
-        name,
-        rating,
-    } = userData
+    const userCharacter = new Character(User)
 
     const charInfo: CharInfoType = {
-        armor,
-        attack,
-        crit_chance,
-        crit_damage,
-        element_id: element,
-        evade_chance,
-        experience,
-        level: getLevel(experience),
+        armor: userCharacter.armor,
+        attack: userCharacter.attack,
+        crit_chance: userCharacter.critical.chance,
+        crit_damage: userCharacter.critical.damage,
+        element_id: userCharacter.element,
+        evade_chance: userCharacter.evade_chance.chance,
+        experience: userCharacter.experience,
+        level: userCharacter.level,
         loses: 0,
         wins: 0,
-        maxLevelExperience: nextLevelExperience(experience),
-        name,
-        rating
+        maxLevelExperience: nextLevelExperience(userCharacter.experience),
+        name: userCharacter.name,
+        rating: userCharacter.rating
     }
 
     const filename = elements.find(item => item.id === charInfo.element_id)?.element as string

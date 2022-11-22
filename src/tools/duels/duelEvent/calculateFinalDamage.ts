@@ -1,4 +1,4 @@
-import { Users } from "@src/types/sqltypes"
+import { UsersFromDB } from "@src/types/sqltypes"
 import { blockedDamage } from "./blockedDamage"
 import { isCriricalDamage } from "./isCriticalDamage"
 
@@ -11,7 +11,7 @@ import { isCriricalDamage } from "./isCriticalDamage"
 
 
 
-export function calculateFinalDamage(character: Users, oponent: Users) {
+export function calculateFinalDamage(character: UsersFromDB, oponent: UsersFromDB) {
     let damage = blockedDamage(character.attack, oponent.armor)
     const isCritical = isCriricalDamage(character)
     if (isCritical) damage *= character.crit_damage

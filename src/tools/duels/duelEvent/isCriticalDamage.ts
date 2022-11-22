@@ -1,4 +1,4 @@
-import { Users } from "@src/types/sqltypes";
+import { UsersFromDB } from "@src/types/sqltypes";
 import getRandomInt from "@tools/getRandomInt";
 
 /**
@@ -7,6 +7,6 @@ import getRandomInt from "@tools/getRandomInt";
  * @returns boolean
  */
 
-export function isCriricalDamage(character: Users) {
+export function isCriricalDamage(character: UsersFromDB) {
     return getRandomInt(0, 100) < character.crit_chance
 }
