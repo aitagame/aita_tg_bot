@@ -2,6 +2,7 @@ import elements from "@data/elements.json";
 
 type CharInfoType = {
     name: string,
+    hp: number,
     element_id: number,
     level: number,
     experience: number,
@@ -28,6 +29,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     const {
         name,
         element_id,
+        hp,
         armor,
         attack,
         crit_chance,
@@ -51,6 +53,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     const template = `
 ${capitalizeFirstLetter(elementName)} ${name}\n
 🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
+🫀 HP: ${hp}
 🗡Attack: ${attack}
 🛡 Defence: ${armor}
 ⚡️ Chance of critical: ${crit_chance}%

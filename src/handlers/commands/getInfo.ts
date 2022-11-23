@@ -29,6 +29,7 @@ const getInfo = async (msg: Message) => {
 
     const charInfo: CharInfoType = {
         armor: userCharacter.armor,
+        hp: userCharacter.hp,
         attack: userCharacter.attack,
         crit_chance: userCharacter.critical.chance,
         crit_damage: userCharacter.critical.damage,
