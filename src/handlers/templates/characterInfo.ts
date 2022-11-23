@@ -49,7 +49,6 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     const percenteOfWins = ((wins / totalBattles) * 100)
 
     // template =>
-
     const template = `
 ${capitalizeFirstLetter(elementName)} ${name}\n
 🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
