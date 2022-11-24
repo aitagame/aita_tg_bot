@@ -4,6 +4,7 @@ export class Critical {
     private readonly baseDamage = 2
     private readonly baseChance = 5
     constructor() {
+
     }
     get chance() {
         return this.baseChance

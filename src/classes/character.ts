@@ -50,7 +50,16 @@ export class Character {
     }
 
     getDamage(attack: number) {
+        const currentStats = {
+            hp: this.hp,
+            isEvaded: false
+        }
+        if(this.evade_chance.isEvaded()) {
+            currentStats.isEvaded = true
+            return currentStats
+        }
         this.hp -= this.blockIncomingDamage(attack)
+        return currentStats
     }
 
     dealDamage() {

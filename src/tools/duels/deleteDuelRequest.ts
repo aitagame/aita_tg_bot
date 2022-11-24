@@ -37,7 +37,6 @@ async function deleteDuelRequest(msg: Message) {
 
     duelist.update(duelist_modifiedData)
     oponent.update(oponent_modifiedData)
-    bot.deleteMessage(msg.chat.id, msg.message_id.toString())
     bot.sendMessage(deulistUserData.chat_id, `${createMention(msg.from?.first_name as string, duelist_user_id)}, The response time for the duel has expired.`, {
         parse_mode: 'Markdown'
     })

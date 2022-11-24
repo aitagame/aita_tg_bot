@@ -2,6 +2,7 @@ import Characters from "@sql/charactersDB"
 import { Character } from "@src/classes/character"
 import bot from "@src/config/bot"
 import { UserDataController } from "@tools/redisController"
+import { Message } from "node-telegram-bot-api"
 import { simulateDuel } from "./simulateDuel"
 
 /**
@@ -48,6 +49,7 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
     */// || || || || ||
     //   \/ \/ \/ \/ \/
     let createdMessage = await bot.sendMessage(chat_id, results.roundsMessages[0])
+
     //  /\ /\ /\ /\ /\
     let i = 1   // 1 becouse index 0 was used before
     const interval = setInterval(async () => {
@@ -56,6 +58,7 @@ async function duelEvent(duelistUserId: number, oponentUserId: number, chat_id: 
             chat_id: createdMessage.chat.id,
             message_id: createdMessage.message_id
         })
+
         i++
         if (typeof roundsMessages[i] === 'undefined') {
             clearInterval(interval)
