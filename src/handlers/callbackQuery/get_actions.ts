@@ -27,7 +27,6 @@ const getActions = async (query: CallbackQuery) => {
             resize_keyboard: true
         }
     })
-
 }
 
 export default getActions

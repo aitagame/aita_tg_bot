@@ -9,6 +9,9 @@ async function textController(msg: Message, meta: Metadata) {
             case ('/info'): {
                 return commands.commands.getInfo(msg)
             }
+            case ('/start'): {
+                return commands.commands.registerUser(msg)
+            }
             case ('/register'): {
                 return commands.commands.registerUser(msg)
             }
@@ -22,11 +25,9 @@ async function textController(msg: Message, meta: Metadata) {
         switch (text) {
             case ('вызвать на дуэль'): {
                 return commands.commands.makeDuelText(msg)
-
             }
         }
     }
-
 
 }
 
