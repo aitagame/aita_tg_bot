@@ -16,8 +16,7 @@ async function deleteDuelRequest(msg: Message) {
     if (deulistUserData.state.action !== 'duel_pending' || oponentUserData.state.action !== 'duel_pending') return
 
     const duelist_modifiedData: UserDataType = {
-        chat_id: deulistUserData.chat_id,
-        user_id: deulistUserData.user_id,
+        ...deulistUserData,
         state: {
             action: 'idle',
             end: null,
@@ -26,8 +25,7 @@ async function deleteDuelRequest(msg: Message) {
     }
 
     const oponent_modifiedData: UserDataType = {
-        chat_id: oponentUserData.chat_id,
-        user_id: oponentUserData.user_id,
+        ...oponentUserData,
         state: {
             action: 'idle',
             end: null,

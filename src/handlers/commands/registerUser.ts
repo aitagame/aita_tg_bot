@@ -5,6 +5,7 @@ import Characters from "@sql/charactersDB"
 import getInfo from "./getInfo"
 import { UserDataType } from "@src/types/redisUserData"
 import { UserDataController } from "@tools/redisController"
+import gameConfig from '@data/game_config.json'
 
 async function registerUser(msg: Message) {
     const dbCharacters = new Characters()
@@ -28,13 +29,18 @@ async function registerUser(msg: Message) {
                 start: null
             },
             user_id: user_id,
-            chat_id: msg.chat.id
+            chat_id: msg.chat.id,
+            energy: {
+                current: gameConfig.energy_default_energy,
+                max: gameConfig.energy_default_max_energy,
+                refresh: null
+            }
         }
 
         await userData.update(defaultUserData)
 
         return bot.sendMessage(chat_id, 'User created')
-        
+
     } else return getInfo(msg)
 
 }

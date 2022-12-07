@@ -23,28 +23,29 @@ export async function createDuelRequest(options: DuelRequestOtions) {
         deleteDuelRequest(msg)
     }, duelDuration)
 
-    const duelistData: UserDataType = {
-        user_id: duelist_user_id,
-        chat_id: chat_id,
-        state: {
-            action: 'duel_pending',
-            start: start,
-            end: end,
-            oponent_user_id: oponent_user_id,
-        },
-    }
+    const duelistData = await duelist.get()
+    const oponentData = await oponent.get()
 
-    const oponentData: UserDataType = {
-        user_id: oponent_user_id,
-        chat_id: chat_id,
+    const newDuelistData: UserDataType = {
+        ...duelistData,
         state: {
             action: 'duel_pending',
+            oponent_user_id: oponent_user_id,
             start: start,
-            end: end,
-            oponent_user_id: duelist_user_id
+            end: end
         }
     }
 
-    duelist.update(duelistData)
+    const newOponentData: UserDataType = {
+        ...oponentData,
+        state: {
+            action: 'duel_pending',
+            oponent_user_id: duelist_user_id,
+            start: start,
+            end: end
+        }
+    }
+
+    duelist.update(newOponentData)
     oponent.update(oponentData)
 }

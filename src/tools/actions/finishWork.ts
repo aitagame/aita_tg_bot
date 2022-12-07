@@ -1,5 +1,4 @@
 import bot from '@src/config/bot'
-import { UserDataType } from '@src/types/redisUserData'
 import actionData from '@data/actions.json'
 import getRandomInt from '@tools/getRandomInt'
 import { ItemDB } from '@src/types/items'
@@ -53,19 +52,17 @@ async function finishWork(user_id: number) {
         ItemController.addItem(user_id, item)
     })
 
-    const modifiedStatus: UserDataType = {
-        chat_id: userData.chat_id,
-        user_id: userData.user_id,
-        state: {
-            action: 'idle',
-            start: null,
-            end: null
-        }
-    }
+
+    // *MODIFIYNG USER DATA
+
+
+    userData.state.action = 'idle'
+    userData.state.start = null
+    userData.state.end = null
 
     const rewardsTemplate = actionRewardsTemplate(rewards, recievedExperience, result) // * Create template of rewards
 
-    user.update(modifiedStatus)
+    user.update(userData)
     bot.sendMessage(userData.chat_id, rewardsTemplate)
 }
 

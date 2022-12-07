@@ -24,7 +24,8 @@ async function goToForest(query: CallbackQuery) {
         return bot.sendMessage(chat_id, 'You already in adventure')
     }
 
-    createTask(taskOptions)
+
+    createTask(userData, 'forest')
     sendAnswer({ chat_id, message_id, query_id: query.id, action: 'forest' })
 }
 

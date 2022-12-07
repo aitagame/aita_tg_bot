@@ -10,7 +10,6 @@ async function restoreTasks() {
     keysList.forEach(async (item) => {
         const user = new UserDataController(parseInt(item))
         const userData = await user.get()
-
         if (userData.state.action === 'idle' || userData.state.start === null || userData.state.end === null) {
             return
         }

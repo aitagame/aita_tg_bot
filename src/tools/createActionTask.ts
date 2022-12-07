@@ -1,6 +1,7 @@
 import { UserDataType, StateAdventure } from "@src/types/redisUserData"
 import finishWork from "./actions/finishWork"
 import { UserDataController } from "./redisController"
+import actionsData from '@data/actions.json'
 
 
 export type TaskOptions = {
@@ -10,28 +11,23 @@ export type TaskOptions = {
     action: StateAdventure['action']
 }
 
-async function createTask(options: TaskOptions) {
-    const { action, chat_id, time, user_id } = options
+async function createTask(userData: UserDataType, action: StateAdventure['action']) {
+    const user_id = userData.user_id
     const user = new UserDataController(user_id)
+    const actionDuration = actionsData[action].time
     const start = Date.now()
-    const end = start + time
+    const end = start + actionDuration
 
 
-    const data: UserDataType = {
-        user_id: user_id,
-        chat_id: chat_id,
-        state: {
-            action: action,
-            start: start,
-            end: end,
-        }
-    }
+    userData.state.action = action
+    userData.state.start = start
+    userData.state.end = end
 
-    user.update(data)
+    user.update(userData)
 
     setTimeout(() => {
         finishWork(user_id)
-    }, time);
+    }, actionDuration);
 }
 
 export { createTask }

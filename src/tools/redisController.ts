@@ -1,41 +1,21 @@
-
-import actionsData from '@data/actions.json'
 import redis from '@src/config/redis'
-
-interface StateAdventure {
-    action: keyof typeof actionsData
-    start: number
-    end: number
-}
-
-interface StateIdle {
-    action: 'idle'
-    start: null
-    end: null
-}
-
-interface StateDuel {
-    action: 'duel_pending' | 'duel_battling'
-    start: number
-    end: number
-    oponent_user_id: number
-}
+import { Energy, StateAdventure, StateDuel, StateIdle, UserDataType } from '@src/types/redisUserData'
+import gameConfig from '@data/game_config.json'
 
 type ActionsType = StateAdventure | StateIdle | StateDuel
-
-type UserDataOptions = { user_id: number, chat_id: number, state: ActionsType }
 
 export class UserData {
     user_id!: number
     chat_id!: number
     state!: ActionsType
-    constructor(options: UserDataOptions) {
+    energy!: Energy
+    constructor(options: UserDataType) {
         Object.assign(this, options)
     }
 }
 
 export class UserDataController {
-    user_id!: number
+    user_id: number
 
     constructor(user_id: number) {
         this.user_id = user_id
@@ -52,6 +32,11 @@ export class UserDataController {
                         action: 'idle',
                         start: null,
                         end: null
+                    },
+                    energy: {
+                        current: gameConfig.energy_default_energy,
+                        max: gameConfig.energy_default_max_energy,
+                        refresh: null
                     }
                 })
                 this.update(defaultUserData)
@@ -88,6 +73,20 @@ export class UserDataController {
                 reject(err)
             }
         })
+    }
+
+    async addEnergy() {
+        try {
+            const data = await this.get()
+            const { current, max } = data.energy
+            if (current >= max) return;
+            data.energy.current++
+            data.energy.refresh = current < max ? Date.now() + gameConfig.energy_reload_time : null
+            this.update(data)
+        }
+        catch (error) {
+            console.error(error)
+        }
     }
 
 }

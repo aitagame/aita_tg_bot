@@ -19,9 +19,16 @@ export interface StateDuel {
     oponent_user_id: number
 }
 
+export type Energy = {
+    current: number
+    max: number
+    refresh: number | null
+}
+
 export type UserDataType = {
     user_id: number
     chat_id: number
     state: StateAdventure | StateIdle | StateDuel
+    energy: Energy
 }
 

@@ -10,12 +10,6 @@ async function goToCaves(query: CallbackQuery) {
     const user_id = query.from.id
     const chat_id = query.message?.chat.id as number
     const message_id = query.message?.message_id as number
-    const taskOptions: TaskOptions = {
-        chat_id: chat_id,
-        time: actionData.caves.time,
-        user_id: user_id,
-        action: 'caves'
-    }
     const user = new UserDataController(user_id)
     const userData = await user.get()
 
@@ -24,7 +18,7 @@ async function goToCaves(query: CallbackQuery) {
         return bot.sendMessage(chat_id, 'You already in adventure')
     }
 
-    createTask(taskOptions)
+    createTask(userData, 'caves')
 
     sendAnswer({ chat_id, message_id, query_id: query.id, action: 'caves' })
 }
