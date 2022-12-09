@@ -18,7 +18,6 @@ async function createTask(userData: UserDataType, action: StateAdventure['action
     const start = Date.now()
     const end = start + actionDuration
 
-
     userData.state.action = action
     userData.state.start = start
     userData.state.end = end
@@ -28,6 +27,7 @@ async function createTask(userData: UserDataType, action: StateAdventure['action
     setTimeout(() => {
         finishWork(user_id)
     }, actionDuration);
+    user.decreaseEnergy()
 }
 
 export { createTask }

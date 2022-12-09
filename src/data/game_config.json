@@ -1,5 +1,5 @@
 {
-    "energy_reload_time": 300000,
+    "energy_reload_time": 3600000,
     "energy_default_energy": 5,
     "energy_default_max_energy": 5
 }

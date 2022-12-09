@@ -7,6 +7,7 @@ import elements from '@data/elements.json'
 import Characters from "@sql/charactersDB"
 import { getLevel, nextLevelExperience } from "@tools/levels"
 import { Character } from "@src/classes/character"
+import { UserDataController } from "@tools/redisController"
 
 const getInfo = async (msg: Message) => {
     const controller = new Characters()
@@ -26,6 +27,9 @@ const getInfo = async (msg: Message) => {
     }
 
     const userCharacter = new Character(userData)
+    const redisDataController = new UserDataController(msg.from.id)
+    const redisUserData = await redisDataController.get()
+
 
     const charInfo: CharInfoType = {
         armor: userCharacter.armor,
@@ -41,7 +45,10 @@ const getInfo = async (msg: Message) => {
         wins: 0,
         maxLevelExperience: nextLevelExperience(userCharacter.experience),
         name: userCharacter.name,
-        rating: userCharacter.rating
+        rating: userCharacter.rating,
+        energy: redisUserData.energy.current,
+        max_energy: redisUserData.energy.max,
+        refreshEnergy: redisUserData.energy.refresh
     }
 
 

@@ -7,6 +7,7 @@ import elements from '@data/elements.json'
 import Characters from "@sql/charactersDB"
 import { nextLevelExperience } from "@tools/levels"
 import { Character } from "@src/classes/character"
+import { UserDataController } from "@tools/redisController"
 
 const getCharacter = async (query: CallbackQuery) => {
     const controller = new Characters()
@@ -20,6 +21,8 @@ const getCharacter = async (query: CallbackQuery) => {
     }
 
     const userCharacter = new Character(User)
+    const redisController = new UserDataController(user_id)
+    const userData = await redisController.get()
 
     const charInfo: CharInfoType = {
         armor: userCharacter.armor,
@@ -35,7 +38,10 @@ const getCharacter = async (query: CallbackQuery) => {
         wins: 0,
         maxLevelExperience: nextLevelExperience(userCharacter.experience),
         name: userCharacter.name,
-        rating: userCharacter.rating
+        rating: userCharacter.rating,
+        energy: userData.energy.current,
+        max_energy: userData.energy.max,
+        refreshEnergy: userData.energy.refresh
     }
 
     const filename = elements.find(item => item.id === charInfo.element_id)?.element as string

@@ -7,6 +7,8 @@ import restoreTasks from '@tools/actions/restoreTasks';
 import inlineQueryController from '@handlers/inlineQueryController';
 import { flushDuelsAfterRestart } from '@tools/flushDuelsAfterRestart'
 
+
+
 async function startServer() {
     try {
         await bot.startPolling().then(_ => console.log('Bot started polling successfully'))
