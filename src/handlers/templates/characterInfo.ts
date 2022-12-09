@@ -60,7 +60,7 @@ function characterInfoTemplate(charInfo: CharInfoType) {
     const template = `
 ${capitalizeFirstLetter(elementName)} ${name}\n
 🏆 Level: ${level} XP: ${experience}/${maxLevelExperience}\n
-🔋 Energy: ${energy}/${max_energy} (${timeToAddEnergy ? `+1🔋 in ${timeToAddEnergy} minutes` : ''})\n
+🔋 Energy: ${energy}/${max_energy} ${timeToAddEnergy ? `(+1🔋 in ${timeToAddEnergy} minutes)` : ''}\n
 🫀 HP: ${hp}
 🗡 Attack: ${attack}
 🛡 Defence: ${armor}
