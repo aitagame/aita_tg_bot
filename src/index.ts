@@ -6,6 +6,7 @@ import callbackQueryController from '@handlers/cbQueryController';
 import restoreTasks from '@tools/actions/restoreTasks';
 import inlineQueryController from '@handlers/inlineQueryController';
 import { flushDuelsAfterRestart } from '@tools/flushDuelsAfterRestart'
+import { restoreEnergyTimers } from '@tools/restoreEnergyTimers';
 
 
 
@@ -24,6 +25,7 @@ async function startServer() {
 startServer()
     .then(async () => {
         await restoreTasks()
+        await restoreEnergyTimers()
         await flushDuelsAfterRestart()
     })
     .then(() => {

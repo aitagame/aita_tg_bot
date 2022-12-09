@@ -111,13 +111,10 @@ export class UserDataController {
     public async refreshEnergy() {
         const data = await this.get()
         if(data.energy.refresh === null) return;
+        if(data.energy.current >= data.energy.max) return;
         setTimeout(() => {
             this.addEnergy()
         }, data.energy.refresh - Date.now())
-    }
-
-    static refreshEnergy(user_id: number) {
-        
     }
 
 }
