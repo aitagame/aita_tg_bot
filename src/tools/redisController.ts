@@ -85,7 +85,7 @@ export class UserDataController {
                 return;
             }
             data.energy.current++
-            data.energy.refresh = current < max ? Date.now() + gameConfig.energy_reload_time : null
+            data.energy.refresh = current >= max ? null : Date.now() + gameConfig.energy_reload_time
             this.update(data)
             this.refreshEnergy()
         }
