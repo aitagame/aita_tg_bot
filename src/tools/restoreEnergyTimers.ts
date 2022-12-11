@@ -1,11 +1,11 @@
 import redis from "@src/config/redis";
-import { UserDataController } from "./redisController";
+import { EnergyController } from "./energyController";
 
 async function restoreEnergyTimers() {
     const keys = await redis.keys('*')
     keys.forEach(async key => {
         const user_id = parseInt(key)
-        const user = new UserDataController(user_id)
+        const user = new EnergyController(user_id)
         const userData = await user.get()
         if (userData.energy.refresh === null) return
         setTimeout(() => {

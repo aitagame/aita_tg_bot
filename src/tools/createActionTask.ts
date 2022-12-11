@@ -2,6 +2,7 @@ import { UserDataType, StateAdventure } from "@src/types/redisUserData"
 import finishWork from "./actions/finishWork"
 import { UserDataController } from "./redisController"
 import actionsData from '@data/actions.json'
+import { EnergyController } from "./energyController"
 
 
 export type TaskOptions = {
@@ -14,6 +15,7 @@ export type TaskOptions = {
 async function createTask(userData: UserDataType, action: StateAdventure['action']) {
     const user_id = userData.user_id
     const user = new UserDataController(user_id)
+    const energy = new EnergyController(user_id)
     const actionDuration = actionsData[action].time
     const start = Date.now()
     const end = start + actionDuration
@@ -27,7 +29,7 @@ async function createTask(userData: UserDataType, action: StateAdventure['action
     setTimeout(() => {
         finishWork(user_id)
     }, actionDuration);
-    user.decreaseEnergy()
+    energy.decreaseEnergy()
 }
 
 export { createTask }

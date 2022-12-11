@@ -74,49 +74,4 @@ export class UserDataController {
             }
         })
     }
-
-    async addEnergy() {
-        try {
-            const data = await this.get()
-            const { current, max } = data.energy
-            if (current >= max) {
-                data.energy.refresh = null
-                this.update(data)
-                return;
-            }
-            data.energy.current++
-            data.energy.refresh = current >= max ? null : Date.now() + gameConfig.energy_reload_time
-            this.update(data)
-            this.refreshEnergy()
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
-
-    async decreaseEnergy() {
-        try {
-            const data = await this.get()
-            if (data.energy.current <= 0) return;
-            data.energy.current -= 1
-            if (data.energy.refresh === null) {
-                data.energy.refresh = Date.now() + gameConfig.energy_reload_time
-            }
-            this.update(data)
-            this.refreshEnergy()
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
-
-    public async refreshEnergy() {
-        const data = await this.get()
-        if (data.energy.refresh === null) return;
-        if (data.energy.current >= data.energy.max) return;
-        setTimeout(() => {
-            this.addEnergy()
-        }, data.energy.refresh - Date.now())
-    }
-
 }

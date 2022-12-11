@@ -27,9 +27,6 @@ async function goToForest(query: CallbackQuery) {
     
     createTask(userData, 'forest')
     sendAnswer({ chat_id, message_id, query_id: query.id, action: 'forest' })
-
-    user.decreaseEnergy()
-
 }
 
 
