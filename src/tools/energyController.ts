@@ -9,18 +9,25 @@ class EnergyController extends UserDataController {
     async addEnergy() {
         try {
             const data = await this.get()
-            data.energy.current++
-            console.log(data)
-            if (data.energy.current >= data.energy.max) {
+            const { current, max } = data.energy
+
+            if (current + 1 === max) {
+                data.energy.current += 1
                 data.energy.refresh = null
                 this.update(data)
-                console.log('no energy more')
                 return;
             }
-            
+
+            if (current === max) {
+                data.energy.refresh = null
+                this.update(data)
+                return
+            }
+
+            data.energy.current += 1
             data.energy.refresh = Date.now() + gameConfig.energy_reload_time
-            this.update(data)
-            this.refreshEnergy()
+            await this.update(data)
+            await this.refreshEnergy()
         }
         catch (error) {
             console.error(error)
@@ -35,8 +42,8 @@ class EnergyController extends UserDataController {
             if (data.energy.refresh === null) {
                 data.energy.refresh = Date.now() + gameConfig.energy_reload_time
             }
-            this.update(data)
-            this.refreshEnergy()
+            await this.update(data)
+            await this.refreshEnergy()
         }
         catch (error) {
             console.error(error)
@@ -45,7 +52,7 @@ class EnergyController extends UserDataController {
 
     public async refreshEnergy() {
         const data = await this.get()
-        if ( data.energy.refresh === null || data.energy.current >= data.energy.max) return;
+        if (data.energy.refresh === null || data.energy.current >= data.energy.max) return;
         setTimeout(() => {
             this.addEnergy()
         }, data.energy.refresh - Date.now())
