@@ -99,7 +99,9 @@ export class UserDataController {
             const data = await this.get()
             if (data.energy.current <= 0) return;
             data.energy.current -= 1
-            data.energy.refresh = Date.now() + gameConfig.energy_reload_time
+            if (data.energy.refresh === null) {
+                data.energy.refresh = Date.now() + gameConfig.energy_reload_time
+            }
             this.update(data)
             this.refreshEnergy()
         }
@@ -110,8 +112,8 @@ export class UserDataController {
 
     public async refreshEnergy() {
         const data = await this.get()
-        if(data.energy.refresh === null) return;
-        if(data.energy.current >= data.energy.max) return;
+        if (data.energy.refresh === null) return;
+        if (data.energy.current >= data.energy.max) return;
         setTimeout(() => {
             this.addEnergy()
         }, data.energy.refresh - Date.now())

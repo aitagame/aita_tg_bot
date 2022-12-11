@@ -1,7 +1,7 @@
 import GameItems from '@data/items.json'
-import { Items } from "@src/types/character"
+import { ItemDB, ItemFull } from '@src/types/items'
 
-type ResourceTemplateType = Array<Items>
+type ResourceTemplateType = Array<ItemDB>
 
 function resourceTemplate(itemsArray: ResourceTemplateType) {
 
@@ -9,7 +9,7 @@ function resourceTemplate(itemsArray: ResourceTemplateType) {
 
     const fullItemList = itemsArray.map(item => {
         const fullItem = GameItems.find(singleItem => item.item_id === singleItem.item_id)
-        return { ...fullItem, quantity: item.quantity }
+        return { ...fullItem!, quantity: item.quantity }    //! non-null assertion operator!!!
     })
 
     const template = fullItemList.map(item => {

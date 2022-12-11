@@ -4,13 +4,47 @@
         "description": "Once it was part of a large tree.",
         "item_id": 1,
         "marker": "🌳",
-        "can_use": false
+        "can_use": false,
+        "can_craft": false
     },
     {
         "name": "Stone",
         "description": "Just a rock.",
         "item_id": 2,
         "marker": "🪨",
-        "can_use": false
+        "can_use": false,
+        "can_craft": false
+    },
+    {
+        "name": "Handle",
+        "description": "Regular wooden handle for creating tools.",
+        "item_id": 3,
+        "marker": "🔨",
+        "can_use": false,
+        "can_craft": true,
+        "craft_require": [
+            {
+                "item_id": 1,
+                "quantity": 4
+            },
+            {
+                "item_id": 2,
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "name": "Turned stone",
+        "description": "A honed stone can become part of a tool or weapon.",
+        "item_id": 4,
+        "marker": "🗡",
+        "can_use": false,
+        "can_craft": true,
+        "craft_require": [
+            {
+                "item_id": 2,
+                "quantity": 8
+            }
+        ]
     }
 ]

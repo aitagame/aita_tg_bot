@@ -8,11 +8,6 @@ export interface Balance {
     wind_crystals: number
 }
 
-export interface Items {
-    item_id: number
-    quantity: number
-}
-
 export interface CharacterType {
     user_id: number
     registered: string
